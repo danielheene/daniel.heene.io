@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    @apply antialiased font-inter;
+  }
+
+  html {
+    @apply antialiased text-gray-200 font-sans transition;
+  }
+
+  html.dark * {
+    --tw-ring-offset-color: #0c0e10;
+  }
+
+  html.is-loading {
+    @apply cursor-wait;
+  }
+
+  html, body, #__next {
+    @apply flex flex-col min-h-screen w-screen;
+  }
+
+  ::selection {
+    @apply bg-primary text-white;
+  }
+
+  :focus-visible {
+    @apply outline outline-[3px] outline-primary-500 outline-offset-4;
+  }
+
+  :focus:not(:focus-visible) {
+    @apply outline-none ring-0 shadow-none;
+  }
+
+  a:hover {
+    @apply underline;
+  }
+}
+
+/*@layer components {*/
+/*  .portable-text strong {*/
+/*    @apply font-bolder*/
+/*  }*/
+/*}*/

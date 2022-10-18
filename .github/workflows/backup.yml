@@ -1,0 +1,53 @@
+name: Backup Routine
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  backup-dataset:
+    runs-on: ubuntu-latest
+    name: Backup Sanity Data
+    strategy:
+      matrix:
+        dataset: [ "development", "production" ]
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3
+
+      - name: set output file
+        id: env
+        run: echo "::set-output name=filename::$(date +%Y-%m-%d)-${{ matrix.dataset}}.tar.gz"
+
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+
+      - name: install global dependencies
+        run: |
+          npm install --global yarn@latest sanity@dev-preview wrangler@latest
+
+      - name: install project dependencies
+        run: |
+          yarn install
+
+      - name: export dataset
+        run: |
+          set -e
+
+          SANITY_STUDIO_API_PROJECT_ID="${{ secrets.SANITY_STUDIO_API_PROJECT_ID }}" \
+          SANITY_AUTH_TOKEN="${{ secrets.SANITY_AUTH_TOKEN }}" \
+            sanity dataset export "${{ matrix.dataset}}" "${{ steps.env.outputs.filename }}"
+        working-directory: ./studio
+
+      - name: upload backup.tar.gz
+        run: |
+          set -e
+
+          CLOUDFLARE_ACCOUNT_ID="${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" \
+          CLOUDFLARE_API_TOKEN="${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+            wrangler r2 object put "backups/danielheene.io/${{ steps.env.outputs.filename }}" -f ${{ steps.env.outputs.filename }}
+        working-directory: ./studio
