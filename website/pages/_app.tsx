@@ -1,17 +1,24 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { AnimatePresence, domAnimation, LazyMotion } from 'framer-motion';
+
+export { reportWebVitals } from 'next-axiom';
+import { get } from 'lodash-es';
+
+import { useAppStore } from '@lib/appStore';
+import { AppPropsWithLayout } from '@lib/types';
+import { isBrowser } from '@lib/utils';
+import { useIsomorphicLayoutEffect } from '@lib/hooks';
+import { pageTransition } from '@lib/transitions';
+import { Toasty } from '@components/Toasty';
+import { HireMeMemoji } from '@components/HireMeMemoji';
+import { GradientBackground } from '@components/GradientBackground';
 
 import '../styles/globals.css';
 import '../styles/font-inter.css';
-import '../styles/font-inter-tight.css';
-import '../styles/font-recursive.css';
-import '../styles/font-space-grotesk.css';
-import '../styles/font-space-mono.css';
+import '../styles/font-jetbrains-mono.css';
 import '../styles/font-syne.css';
-import { GradientBackground } from '@components/GradientBackground';
-import { Toasty } from '@components/Toasty';
-import { useAppStore } from '@lib/appStore';
-import { AppPropsWithLayout } from '@lib/types';
-import { useIsomorphicLayoutEffect } from '@lib/utils';
+import { DefaultSeo } from 'next-seo';
+import { MetaTag } from 'next-seo/lib/types';
 
 export default function App({
   Component,
@@ -20,29 +27,89 @@ export default function App({
 }: AppPropsWithLayout): JSX.Element {
   const getLayout: (page: JSX.Element) => JSX.Element =
     Component.getLayout ?? ((page) => page);
-  const { setSettings } = useAppStore();
+  const {
+    features,
+    isRouteChanging,
+    meta,
+    setAppConfig,
+    setRouteChanging,
+    setAnimateBackground,
+  } = useAppStore();
 
   useIsomorphicLayoutEffect(() => {
-    setSettings(pageProps.settings);
-  }, [pageProps]);
+    if ('appConfig' in pageProps) {
+      setAppConfig(pageProps.appConfig);
+    }
+  }, [pageProps.appConfig]);
 
-  // useEffect(() => {
-  //   NProgress.configure({
-  //     minimum: 0.3,
-  //     easing: 'ease',
-  //     speed: 800,
-  //     showSpinner: false,
-  //   });
-  //
-  //   router.events.on('routeChangeStart', NProgress.start);
-  //   router.events.on('routeChangeComplete', NProgress.done);
-  //   router.events.on('routeChangeError', NProgress.done);
-  // }, []);
+  /**
+   * add class for loading state to dom
+   */
+  React.useEffect(() => {
+    document.documentElement.classList.toggle('is-loading', isRouteChanging);
+  }, [isRouteChanging]);
 
-  return getLayout(
+  /**
+   * bind router events
+   */
+  React.useEffect(() => {
+    router.events.on('routeChangeStart', (_, { shallow }) => {
+      if (shallow) return;
+
+      if (isBrowser) {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      }
+      setRouteChanging(true);
+    });
+
+    router.events.on('routeChangeComplete', (path: string) => {
+      setTimeout(() => setRouteChanging(false), pageTransition.speed);
+      setAnimateBackground(path === '/');
+    });
+
+    router.events.on('routeChangeError', () => {
+      setRouteChanging(false);
+    });
+  }, [setRouteChanging]);
+
+  const { hireMeWidget, easterEggWidget } = features || {};
+  const { titleTemplate, description, keywords, tags } = meta;
+  const id = get(router, 'asPath', 'home');
+
+  return (
     <>
-      <Component {...pageProps} />
-      <Toasty audioPath='/toasty/toasty.mp3' imagePath='/toasty/toasty.webp' />
+      {/*<Head>*/}
+      {/*  <meta name='viewport' content='width=device-width, initial-scale=1' />*/}
+      {/*</Head>*/}
+      <DefaultSeo
+        titleTemplate={titleTemplate}
+        description={description}
+        additionalMetaTags={
+          tags.map(({ type, value, content }) => ({
+            [type]: value,
+            content,
+          })) as unknown as MetaTag[]
+        }
+      />
+
+      <LazyMotion features={domAnimation}>
+        <AnimatePresence mode='wait'>
+          <React.Fragment key={id}>
+            {getLayout(<Component key={id} {...pageProps} />)}
+          </React.Fragment>
+        </AnimatePresence>
+      </LazyMotion>
+
+      {easterEggWidget && (
+        <Toasty
+          audioPath='/toasty/toasty.mp3'
+          imagePath='/toasty/toasty.webp'
+        />
+      )}
+      {hireMeWidget && <HireMeMemoji />}
       <GradientBackground darkenTop={true} />
     </>
   );

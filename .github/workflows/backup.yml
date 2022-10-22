@@ -49,5 +49,5 @@ jobs:
 
           CLOUDFLARE_ACCOUNT_ID="${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" \
           CLOUDFLARE_API_TOKEN="${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-            wrangler r2 object put "backups/danielheene.io/${{ steps.env.outputs.filename }}" -f ${{ steps.env.outputs.filename }}
+            wrangler r2 object put "backups/daniel.heene.io/${{ steps.env.outputs.filename }}" -f ${{ steps.env.outputs.filename }}
         working-directory: ./studio

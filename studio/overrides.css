@@ -17,6 +17,10 @@
   margin-left: auto;
 }
 
+[data-testid="field-body"] [data-testid="pt-editor"] {
+  min-height: calc(100vh - 300px) !important;
+}
+
 /**
 
  */
@@ -41,19 +45,37 @@
 }
 
 [data-testid^='fieldset-'] > [data-ui='Box'],
-[data-testid="field-contactServices"] > [data-ui='Box'] {
+[data-testid="field-contact"] > [data-ui='Box'] {
   border-left: none !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
-[data-testid="field-contactServices"] {
+[data-testid="field-contact"] {
   display: flex !important;
   flex-direction: column !important;
   gap: 0.25rem;
 }
 
-[data-testid^='fieldset-'] > [data-ui='Box'] > [data-ui='Grid'] {
+[data-testid="field-features"] [data-ui='Grid'] > [data-ui='Stack'] {
+  gap: 0.5rem;
+}
+
+[data-testid="field-features"] [data-ui='Grid'] > [data-ui='Stack'] > div {
+  gap: 0.5rem;
+}
+
+[data-testid='fieldset-1-11'] > [data-ui='Box'] > [data-ui='Grid'],
+[data-testid='fieldset-2-10'] > [data-ui='Box'] > [data-ui='Grid'],
+[data-testid='fieldset-3-9'] > [data-ui='Box'] > [data-ui='Grid'],
+[data-testid='fieldset-4-8'] > [data-ui='Box'] > [data-ui='Grid'],
+[data-testid='fieldset-5-7'] > [data-ui='Box'] > [data-ui='Grid'],
+[data-testid='fieldset-6-6'] > [data-ui='Box'] > [data-ui='Grid'],
+[data-testid='fieldset-7-5'] > [data-ui='Box'] > [data-ui='Grid'],
+[data-testid='fieldset-8-4'] > [data-ui='Box'] > [data-ui='Grid'],
+[data-testid='fieldset-9-3'] > [data-ui='Box'] > [data-ui='Grid'],
+[data-testid='fieldset-10-2'] > [data-ui='Box'] > [data-ui='Grid'],
+[data-testid='fieldset-11-1'] > [data-ui='Box'] > [data-ui='Grid'] {
   grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
 }
 

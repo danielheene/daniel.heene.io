@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
-import { defineField, defineType } from 'sanity';
+import { defineArrayMember, defineField, defineType } from 'sanity';
 
 import { SanityPreviewWithPublishedLabel } from '../../components';
-import { COL_FIELDSET_NAME, COL_FIELDSETS } from '../_constants';
+import { COL_FIELDSET_NAME, COL_FIELDSETS } from '../_shared';
 
 export default defineType({
   title: 'Qualification',
@@ -23,8 +23,9 @@ export default defineType({
       title: 'Entries',
       name: 'entries',
       type: 'array',
+      initialValue: [],
       of: [
-        {
+        defineArrayMember({
           title: 'Qualification Block',
           name: 'block.qualification',
           type: 'object',
@@ -40,35 +41,41 @@ export default defineType({
               title: 'Job Title',
               name: 'title',
               type: 'string',
+              initialValue: '',
             }),
             defineField({
               title: 'Employer',
               name: 'employer',
               type: 'string',
+              initialValue: '',
               fieldset: COL_FIELDSET_NAME['6-6'],
             }),
             defineField({
               title: 'Location',
               name: 'location',
               type: 'string',
+              initialValue: '',
               fieldset: COL_FIELDSET_NAME['6-6'],
             }),
             defineField({
               title: 'Start',
               name: 'start',
               type: 'string',
+              initialValue: '',
               fieldset: COL_FIELDSET_NAME['6-6'],
             }),
             defineField({
               title: 'End',
               name: 'end',
               type: 'string',
+              initialValue: '',
               fieldset: COL_FIELDSET_NAME['6-6'],
             }),
             defineField({
               title: 'Body',
               name: 'body',
               type: 'text',
+              initialValue: '',
               rows: 6,
             }),
           ],
@@ -86,10 +93,10 @@ export default defineType({
               title,
               subtitle,
               published,
-              media: <Icon icon='ci:code' />,
+              media: <Icon icon='mdi:briefcase' />,
             }),
           },
-        },
+        }),
       ],
     }),
   ],

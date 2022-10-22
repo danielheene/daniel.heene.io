@@ -1,5 +1,7 @@
+const { withAxiom } = require('next-axiom');
+
 /** @type {import('next').NextConfig} */
-module.exports = {
+module.exports = withAxiom({
   reactStrictMode: true,
   swcMinify: true,
   poweredByHeader: false,
@@ -120,7 +122,7 @@ module.exports = {
   //
   //   return config;
   // },
-};
+});
 
 // https://nextjs.org/docs/advanced-features/security-headers
 const ContentSecurityPolicy = `

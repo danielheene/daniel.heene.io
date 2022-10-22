@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity';
+import { defineArrayMember, defineField, defineType } from 'sanity';
 
 export default defineType({
   title: 'Services',
@@ -19,12 +19,13 @@ export default defineType({
       title: 'Entries',
       name: 'entries',
       type: 'array',
+      initialValue: [],
       of: [
-        {
+        defineArrayMember({
           title: 'Service Feature',
           name: 'serviceItem',
           type: 'block.serviceItem',
-        },
+        }),
       ],
     }),
   ],

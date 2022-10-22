@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "private": true,
   "description": "Personal Website for daniel.heene.io",
-  "repository": "https://github.com/danielheene/danielheene.git",
+  "repository": "https://github.com/danielheene/daniel.heene.io",
   "license": "MIT",
   "author": "Daniel Heene <daniel@heene.io>",
   "workspaces": [
@@ -18,7 +18,7 @@
     "chore:set-versions": "set-versions --workspaces",
     "dev": "dotenv turbo run dev --include-dependencies --parallel --continue",
     "build": "dotenv turbo run build --include-dependencies",
-    "env": "DOPPLER_CONFIG=development_local doppler secrets download --format env --no-file > .env || true",
+    "env": "doppler secrets download --format env --no-file > .env || true",
     "sanity": "dotenv yarn workspace studio sanity"
   },
   "prettier": {

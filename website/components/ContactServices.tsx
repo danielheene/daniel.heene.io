@@ -1,18 +1,31 @@
-import clsx from 'clsx';
-import { ContactProvider, ContactService } from '@lib/types';
-import { resolveContactService } from '@lib/utils';
+import clsx, { ClassValue } from 'clsx';
+import { ContactProvider, ContactItem } from '@lib/types';
+import { resolveContactItem } from '@lib/utils';
 import { Icon } from '@iconify/react';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 
-interface ContactServicesProps {
+interface ContactModuleProps {
   entries: Record<string, string>;
-  selection: string[];
+  selection?: string[];
+  className?: ClassValue;
+  small?: boolean;
 }
 
-export const ContactServices = ({
+export const ContactModule = ({
   entries,
-  selection = [],
-}: ContactServicesProps): JSX.Element => {
+  selection = [
+    'github',
+    'linkedin',
+    'xing',
+    'instagram',
+    'discord',
+    'whatsapp',
+    'mail',
+    'phone',
+  ],
+  small,
+  className,
+}: ContactModuleProps): JSX.Element => {
   /**
    *
    */
@@ -21,9 +34,8 @@ export const ContactServices = ({
       Object.entries(entries)
         .filter(([key, _]) => selection.includes(key))
         .sort((a, b) => {
-          const aPos = Object.keys(entries).findIndex((i) => i === a[0]);
-          const bPos = Object.keys(entries).findIndex((i) => i === b[0]);
-
+          const aPos = selection.indexOf(a[0]);
+          const bPos = selection.indexOf(b[0]);
           return aPos > bPos ? +1 : -1;
         }),
     [entries]
@@ -31,29 +43,38 @@ export const ContactServices = ({
 
   return (
     <div
-      className={clsx(['flex', 'flex-row', 'justify-center', 'py-2', 'gap-3'])}
+      className={clsx([
+        'flex',
+        'flex-row',
+        'justify-center',
+        'py-2',
+        'gap-3',
+        className,
+      ])}
     >
       {services.map(([key, value]) => {
-        const { urlPrefix, icon }: ContactService = resolveContactService(
+        const { urlPrefix, icon }: ContactItem = resolveContactItem(
           key as ContactProvider
         );
 
         return (
           <a
             key={key}
-            href={`${urlPrefix as string}/${value}`}
+            href={`${urlPrefix as string}${value}`}
             target='_blank'
             rel='noopener noreferrer'
-            className={clsx(
+            className={clsx([
               'block',
-              'text-3xl',
-              'p-2',
-              'transition-colors',
-              'hover:scale-115',
-              'hover:text-orange-400'
-            )}
+              'relative',
+              'text-white',
+              'transition-all',
+              'hover:scale-125',
+              'active:outline-0',
+              'duration-100',
+              small ? ['text-2xl', 'p-1.5'] : ['text-3xl', 'p-1.5', 'sm:p-2.5'],
+            ])}
           >
-            <Icon icon={icon} />
+            <Icon icon={icon} className='fill-white' />
           </a>
         );
       })}

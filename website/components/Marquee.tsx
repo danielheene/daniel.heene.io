@@ -1,13 +1,15 @@
 import { Children, memo, ReactNode, useId, useMemo } from 'react';
+import { CSSRuleObject } from 'tailwindcss/types/config';
 
 interface MarqueeProps {
   offset?: number;
   speed?: number;
+  reverse?: boolean;
   children: ReactNode | ReactNode[];
 }
 
 export const Marquee = memo(
-  ({ children, offset = 0, speed = 30 }: MarqueeProps) => {
+  ({ children, offset = 25, speed = 10, reverse = false }: MarqueeProps) => {
     const marqueeId = useId();
     const adjustedChildren = useMemo(() => {
       const items = Array.from({ length: 4 }, (_, multiplier) =>
@@ -29,9 +31,20 @@ export const Marquee = memo(
       return [...items];
     }, [children]);
 
+    const styles: CSSRuleObject = useMemo(
+      () => ({
+        ['--marquee-offset']: `${offset}%`,
+        ['--marquee-speed']: `${speed}s`,
+        ['--marquee-initial']: `calc(-25% + var(--marquee-offset))`,
+        ['--marquee-final']: `calc(-50% + var(--marquee-offset))`,
+        ['--marquee-direction']: `${reverse ? 'reverse' : 'normal'}`,
+      }),
+      [offset, speed, reverse]
+    );
+
     return (
       <>
-        <div className='marquee' style={{}}>
+        <div className='marquee' style={styles}>
           <div className='marquee-inner' role='marquee'>
             {adjustedChildren}
           </div>
@@ -48,35 +61,9 @@ export const Marquee = memo(
           }
 
           .marquee {
-            --marquee-offset: ${offset}%;
-            --marquee-speed: ${speed}s;
-            --marquee-initial: calc(-25% + var(--marquee-offset));
-            --marquee-final: calc(-50% + var(--marquee-offset));
-
             position: relative;
             overflow: hidden;
           }
-
-          //.marquee::before,
-          //.marquee::after {
-          //  content: ' ';
-          //  display: block;
-          //  width: 50px;
-          //  position: absolute;
-          //  top: 0;
-          //  height: 100%;
-          //  z-index: 1;
-          //}
-
-          //.marquee::before {
-          //  left: 0;
-          //  background-image: linear-gradient(to right, black, transparent);
-          //}
-          //
-          //.marquee::after {
-          //  left: calc(100% - 50px);
-          //  background-image: linear-gradient(to right, transparent, black);
-          //}
 
           .marquee :global(.marquee-inner) {
             position: relative;
@@ -85,6 +72,7 @@ export const Marquee = memo(
             flex-direction: row;
             transform: translate3d(var(--marquee-initial), 0, 0);
             animation: marquee var(--marquee-speed) linear infinite running;
+            animation-direction: var(--marquee-direction);
           }
 
           .marquee :global(.marquee-item) {

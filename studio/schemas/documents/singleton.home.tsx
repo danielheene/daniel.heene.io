@@ -1,9 +1,10 @@
 import { Icon } from '@iconify/react';
-import { defineField, defineType } from 'sanity';
+import { defineArrayMember, defineField, defineType } from 'sanity';
+import { COL_FIELDSET_NAME, COL_FIELDSETS, FieldConfig } from '../_shared';
 
 export default defineType({
   title: 'Home',
-  name: 'home',
+  name: 'singleton.home',
   type: 'document',
   icon: () => <Icon icon='carbon:home' />,
   groups: [
@@ -11,6 +12,10 @@ export default defineType({
       name: 'main',
       title: 'Main',
       default: true,
+    },
+    {
+      name: 'projects',
+      title: 'Projects',
     },
     {
       name: 'services',
@@ -41,20 +46,78 @@ export default defineType({
           name: 'headline',
           type: 'text',
           rows: 2,
-          // fieldset: COL_FIELDSET_NAME['6-6'],
+          initialValue: '',
         }),
         defineField({
           title: 'Sub Headline',
           name: 'subHeadline',
           type: 'array',
-          of: [{ type: 'string' }],
-          // rows: 2,
-          // fieldset: COL_FIELDSET_NAME['6-6'],
+          initialValue: [],
+          of: [defineArrayMember({ type: 'string' })],
         }),
         defineField({
           title: 'Portrait',
           name: 'portrait',
           type: 'image',
+        }),
+      ],
+    }),
+    defineField({
+      title: 'Projects',
+      name: 'projectTeaser',
+      type: 'object',
+      options: {},
+      group: 'projects',
+      fieldsets: COL_FIELDSETS,
+      fields: [
+        defineField({
+          title: 'Section Header',
+          name: 'header',
+          type: 'sectionHeader',
+        }),
+        defineField({
+          title: 'Project #01',
+          name: 'projectOne',
+          type: 'reference',
+          options: {
+            disableNew: true,
+            filter: 'published == true',
+          },
+          to: [{ type: 'projects.project' }],
+          fieldset: COL_FIELDSET_NAME['6-6'],
+        }),
+        defineField({
+          title: 'Project #02',
+          name: 'projectTwo',
+          type: 'reference',
+          options: {
+            disableNew: true,
+            filter: 'published == true',
+          },
+          to: [{ type: 'projects.project' }],
+          fieldset: COL_FIELDSET_NAME['6-6'],
+        }),
+        defineField({
+          title: 'Project #03',
+          name: 'projectThree',
+          type: 'reference',
+          options: {
+            disableNew: true,
+            filter: 'published == true',
+          },
+          to: [{ type: 'projects.project' }],
+          fieldset: COL_FIELDSET_NAME['6-6'],
+        }),
+        defineField({
+          title: 'Project #04',
+          name: 'projectFour',
+          type: 'reference',
+          options: {
+            disableNew: true,
+            filter: 'published == true',
+          },
+          to: [{ type: 'projects.project' }],
+          fieldset: COL_FIELDSET_NAME['6-6'],
         }),
       ],
     }),
@@ -71,17 +134,15 @@ export default defineType({
       group: 'qualifications',
     }),
     defineField({
-      title: 'Logo Cloud',
-      name: 'logoCloud',
-      type: 'section.logoCloud',
+      title: 'Customers Marquee',
+      name: 'customers',
+      type: 'section.customers',
       group: 'customers',
     }),
-    defineField({
-      title: 'Meta',
-      name: 'metaDefault',
-      type: 'meta.defaults',
-      group: 'meta',
-    }),
+    defineField({ ...FieldConfig.Title, group: 'meta' }),
+    defineField({ ...FieldConfig.MetaDescription, group: 'meta' }),
+    defineField({ ...FieldConfig.MetaKeywords, group: 'meta' }),
+    defineField({ ...FieldConfig.MetaTags, group: 'meta' }),
   ],
   preview: {
     prepare: () => ({

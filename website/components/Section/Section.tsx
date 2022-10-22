@@ -20,7 +20,9 @@ export const Section = (props: SectionProps): JSX.Element => {
           'relative',
           'w-screen',
           'pt-32',
-          'first-of-type:pt-0'
+          'first-of-type:pt-0',
+          'snap-start',
+          'snap-both'
         )}
       >
         <div

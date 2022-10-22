@@ -1,7 +1,8 @@
 import { NextSeo } from 'next-seo';
 import React, { ComponentProps, ReactNode } from 'react';
-import Head from 'next/head';
 import { Header } from '@components/Header';
+import { Footer } from '@components/Footer/Footer';
+import { useAppStore } from '@lib/appStore';
 
 interface DefaultLayoutProps {
   children?: ReactNode | ReactNode[];
@@ -10,16 +11,16 @@ interface DefaultLayoutProps {
 
 export function DefaultLayout({ children, seo }: DefaultLayoutProps) {
   // const seoProps = useSeoProps(seo);
+  const { metaNavigation, contact } = useAppStore();
 
   return (
     <>
-      <Head>
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-      </Head>
-      <>
-        <Header />
-        {children}
-      </>
+      {/*<Head></Head>*/}
+      <Header />
+      <main>{children}</main>
+      {!!metaNavigation && !!contact && (
+        <Footer contact={contact} metaNavigation={metaNavigation} />
+      )}
     </>
   );
 }

@@ -2,36 +2,49 @@ import { Icon } from '@iconify/react';
 import { defineField, defineType } from 'sanity';
 
 export default defineType({
-  title: 'Navigation',
+  title: 'Navigation Settings',
   name: 'settings.navigation',
   type: 'document',
   icon: () => <Icon icon='carbon:catalog' />,
   liveEdit: false,
+  groups: [
+    {
+      title: 'Main Navigation',
+      name: 'main',
+      default: true,
+    },
+    {
+      title: 'Footer Navigation',
+      name: 'footer',
+    },
+    {
+      title: 'Meta Navigation',
+      name: 'meta',
+    },
+  ],
   fields: [
     defineField({
-      title: 'Label',
-      name: 'label',
-      type: 'string',
+      title: 'Main Navigation',
+      name: 'main',
+      type: 'navigation',
+      group: 'main',
     }),
     defineField({
-      title: 'Identifier',
-      name: 'id',
-      type: 'slug',
+      title: 'Footer Navigation',
+      name: 'footer',
+      type: 'navigation',
+      group: 'footer',
     }),
     defineField({
-      title: 'Entries',
-      name: 'entries',
-      type: 'array',
-      of: [
-        {
-          type: 'navigationItem',
-        },
-      ],
+      title: 'Meta Navigation',
+      name: 'meta',
+      type: 'navigation',
+      group: 'meta',
     }),
   ],
   preview: {
     prepare: () => ({
-      title: 'Navigation',
+      title: 'Navigation Settings',
     }),
   },
 });

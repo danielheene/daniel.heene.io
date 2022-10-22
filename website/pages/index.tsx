@@ -1,56 +1,27 @@
 import React, { ReactElement } from 'react';
 import { GetStaticProps } from 'next';
-import { groq } from 'next-sanity';
 
 import { HeroStage } from '@components/HeroStage';
-import { LogoCloudSection } from '@components/LogoCloudSection';
+import { CustomersSection } from '@components/CustomersSection';
 import { QualificationsSection } from '@components/QualificationsSection';
 import { ServicesSection } from '@components/ServicesSection';
 import { DefaultLayout } from '@layouts/Default.layout';
-import Sanity, { homeQuery } from '@lib/sanity';
-import {
-  HeroStageData,
-  LogoCloudSectionData,
-  NextPageWithLayout,
-  QualificationsSectionData,
-  ServicesSectionData,
-  Settings,
-} from '@lib/types';
+import Sanity, { appConfigQuery, homeQuery } from '@lib/sanity';
+import { HomeData, NextPageWithLayout } from '@lib/types';
+import { ProjectsSection } from '@components/ProjectsSection';
 
-// import { LayoutGroup } from 'framer-motion';
+interface Props extends HomeData {}
 
-interface HomeData {
-  introLine: string;
-  services: ServicesSectionData;
-  qualifications: QualificationsSectionData;
-  logoCloud: LogoCloudSectionData;
-  heroStage: HeroStageData;
-}
-
-interface Props extends HomeData {
-  data: HomeData;
-  navigations: [];
-  settings: Partial<Settings>;
-}
-
-const HomePage: NextPageWithLayout = ({
-  data,
-  navigations,
-  settings,
-}: Props) => {
-  const { heroStage, qualifications, logoCloud, services } = data;
-  // const { hireMe } = settings;
-
-  // console.log(data, navigations, settings);
+const HomePage: NextPageWithLayout = (props: Props) => {
+  const { heroStage, qualifications, customers, services } = props;
 
   return (
     <>
       {heroStage && <HeroStage {...heroStage} />}
-
-      <ServicesSection {...services} />
-      <QualificationsSection {...qualifications} />
-      <LogoCloudSection {...logoCloud} />
-      {/*{hireMe && <HireMeMemoji />}*/}
+      {services && <ServicesSection {...services} />}
+      {qualifications && <QualificationsSection {...qualifications} />}
+      {customers && <CustomersSection {...customers} />}
+      <ProjectsSection />
     </>
   );
 };
@@ -61,15 +32,15 @@ HomePage.getLayout = (page: ReactElement) => (
 
 export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   const SanityClient = Sanity.getClient(preview);
-  const { data, settings, navigations } = await SanityClient.fetch(homeQuery);
+  const appConfig = await SanityClient.fetch(appConfigQuery);
+  const data = await SanityClient.fetch(homeQuery);
 
-  // console.log(JSON.stringify(data, null, 2));
+  console.log(JSON.stringify(appConfig, null, 2));
 
   return {
     props: {
-      data,
-      navigations,
-      settings,
+      ...data,
+      appConfig,
     },
     revalidate: process.env.NODE_ENV === 'production' ? 300 : 5,
   };

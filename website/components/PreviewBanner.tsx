@@ -10,8 +10,8 @@ export default function PreviewBanner() {
   const router = useRouter();
 
   const handleDisableClick = React.useCallback(() => {
-    if (isBrowser()) {
-      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/preview?disable=1`)
+    if (isBrowser) {
+      fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/preview?disable=1`)
         .then(({ ok }) => {
           if (ok) router.reload();
         })

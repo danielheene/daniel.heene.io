@@ -1,3 +1,3 @@
-export * from './PolymorphicComponent';
-export * from './sanity-schemas';
-export * from './app';
+export * from './polymorphic-component';
+export * from './sanity-queries';
+export * from './next-app';

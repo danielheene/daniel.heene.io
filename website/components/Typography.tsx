@@ -41,7 +41,7 @@ export const Typography = memo(
         switch (variant) {
           case 'heading':
             return clsx([
-              'font-space-grotesk',
+              'font-syne',
               'font-medium',
               'text-4xl',
               'md:text-6xl',
@@ -63,6 +63,9 @@ export const Typography = memo(
               'text-4xl',
               'md:text-6xl',
               'lg:text-8xl',
+              'text-transparent',
+              'bg-clip-text',
+              'bg-vibrant-october-silence',
               className,
             ]);
           case 'section-subheading':
@@ -76,7 +79,7 @@ export const Typography = memo(
             ]);
           case 'section-caption':
             return clsx([
-              'font-recursive',
+              'font-syne',
               'font-semibold',
               'text-sm',
               'md:text-md',

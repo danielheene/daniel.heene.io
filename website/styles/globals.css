@@ -19,8 +19,28 @@
     @apply cursor-wait;
   }
 
-  html, body, #__next {
+  html, body {
     @apply flex flex-col min-h-screen w-screen;
+  }
+
+  #__next {
+    @apply grid min-h-screen w-screen;
+    grid-template-areas: "header" "main" "footer";
+  }
+
+  #__next > header {
+    height: min-content;
+    grid-area: header;
+  }
+
+  #__next > main {
+    height: auto;
+    grid-area: main;
+  }
+
+  #__next > footer {
+    height: min-content;
+    grid-area: footer;
   }
 
   ::selection {
@@ -39,9 +59,3 @@
     @apply underline;
   }
 }
-
-/*@layer components {*/
-/*  .portable-text strong {*/
-/*    @apply font-bolder*/
-/*  }*/
-/*}*/

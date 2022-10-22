@@ -61,7 +61,17 @@ const QualificationEntry = ({
             )}
           />
           <Card variant='light' tilted>
-            <h3 className='font-syne font-bold text-3xl text-primary-700 mb-1'>
+            <h3
+              className={clsx(
+                'font-syne',
+                'font-bold',
+                'text-3xl',
+                'mb-1',
+                'text-white/30',
+                'bg-clip-text',
+                'bg-vibrant-october-silence'
+              )}
+            >
               {title}
             </h3>
             <p className='font-syne font-semibold text-gray-200 mb-3'>

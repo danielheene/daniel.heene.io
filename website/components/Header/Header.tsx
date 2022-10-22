@@ -12,8 +12,7 @@ import { useOnResizeCallback } from '@lib/hooks';
 
 export const Header = (): JSX.Element => {
   const headerRef = useRef<HTMLDivElement>();
-  const { setHeaderHeight, showNavigation, setShowNavigation, settings } =
-    useAppStore();
+  const { setHeaderHeight, showNavigation, setShowNavigation } = useAppStore();
 
   useOnResizeCallback(
     () => {
@@ -27,35 +26,36 @@ export const Header = (): JSX.Element => {
   );
 
   return (
-    <Box
-      as='header'
-      ref={headerRef}
-      className={clsx([
-        'fixed',
-        'container',
-        'flex',
-        'flex-row',
-        'items-center',
-        'justify-between',
-        'p-6',
-        '-translate-x-1/2',
-        'left-1/2',
-        showNavigation ? 'z-menu-button' : 'z-header',
-      ])}
-    >
-      <Logo size='text-header' />
-
-      <NavigationMenuButton
+    <header>
+      <Box
+        ref={headerRef}
         className={clsx([
-          'xl:hidden',
-          'relative',
-          'text-header',
-          'z-menu-button',
+          // 'fixed',
+          'container',
+          'flex',
+          'flex-row',
+          'items-center',
+          'justify-between',
+          'p-6',
+          // '-translate-x-1/2',
+          // 'left-1/2',
+          showNavigation ? 'z-menu-button' : 'z-header',
         ])}
-        isOpen={showNavigation}
-        onClick={() => setShowNavigation(!showNavigation)}
-      />
-      <NavigationDropdown />
-    </Box>
+      >
+        <Logo size='text-header' />
+
+        <NavigationMenuButton
+          className={clsx([
+            'xl:hidden',
+            'relative',
+            'text-header',
+            'z-menu-button',
+          ])}
+          isOpen={showNavigation}
+          onClick={() => setShowNavigation(!showNavigation)}
+        />
+        <NavigationDropdown />
+      </Box>
+    </header>
   );
 };

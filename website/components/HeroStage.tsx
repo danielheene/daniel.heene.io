@@ -4,9 +4,8 @@ import clsx, { ClassValue } from 'clsx';
 
 import { useAppStore } from '@lib/appStore';
 import { ContactProvider, HeroStageData } from '@lib/types';
-import { ContactServices } from '@components/ContactServices';
+import { ContactModule } from '@components/ContactServices';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Section } from '@components/Section';
 
 interface HeroStageProps extends HeroStageData {
   className?: ClassValue | string;
@@ -18,8 +17,7 @@ export const HeroStage = ({
   subHeadline,
   headline,
 }: HeroStageProps): JSX.Element => {
-  const { headerHeight, settings } = useAppStore();
-  const { contactServices } = settings;
+  const { headerHeight, contact } = useAppStore();
   const [subHeadlineIndex, setSubHeadlineIndex] = useState<number>(0);
 
   const increment = useCallback(() => {
@@ -33,34 +31,86 @@ export const HeroStage = ({
   }, [subHeadlineIndex]);
 
   return (
-    <Section>
+    <section>
       <div
         style={{
           ['--header-height' as any]: `${headerHeight}px`,
         }}
         className={clsx([
           'relative',
-          'grid',
-          'grid-cols-1',
-          'xl:grid-cols-2',
+          'container',
+          'flex',
+          'flex-col',
+          'lg:flex-row',
           'justify-center',
-          'items-center',
-          'gap-32',
+          'items-start',
           'py-[var(--header-height)]',
-          'min-h-screen',
+          'lg:items-center',
+          'lg:min-h-screen',
+          'gap-16',
           className,
         ])}
       >
-        <div className='flex flex-col items-center justify-center'>
+        <div
+          className={clsx([
+            'flex',
+            'flex-col',
+            'justify-center',
+            'items-center',
+            'order-1',
+            'lg:order-2',
+            'w-full',
+            'p-0',
+            'sm:p-24',
+            'lg:p-0',
+            // 'mt-[var(--header-height)]',
+            'lg:mt-0',
+          ])}
+        >
+          {portrait && (
+            <Image
+              src={portrait.url}
+              sizes='100vw'
+              width={portrait.dimensions.width}
+              height={portrait.dimensions.height}
+              alt=''
+              className={clsx([
+                'block',
+                'w-10/12',
+                'sm:w-full',
+                'h-full',
+                'pointer-events-none',
+                'object-contain',
+                'flex-shrink-1',
+              ])}
+              style={{
+                maxHeight: 'calc(100vh - 2 * var(--header-height))',
+              }}
+            />
+          )}
+        </div>
+        <div
+          className={clsx([
+            'flex',
+            'flex-col',
+            'items-center',
+            'justify-center',
+            'order-2',
+            'lg:order-1',
+            'w-full',
+          ])}
+        >
           {headline && (
             <h1
               className={clsx([
                 'font-syne',
                 'font-bold',
                 'text-white',
-                'text-3xl',
-                'sm:text-4xl',
-                'lg:text-5xl',
+                'text-2xl',
+                'sm:text-3xl',
+                'lg:text-4xl',
+                'relative',
+                'z-10',
               ])}
             >
               {headline}
@@ -80,9 +130,10 @@ export const HeroStage = ({
                     className={clsx([
                       'font-syne',
                       'font-bold',
-                      'text-4xl',
-                      'sm:text-6xl',
-                      'lg:text-6xl',
+                      'font-[size:110%]',
+                      'text-3xl',
+                      'sm:text-4xl',
+                      'lg:text-5xl',
                       'text-transparent',
                       'bg-clip-text',
                       'bg-vibrant-october-silence',
@@ -91,6 +142,8 @@ export const HeroStage = ({
                       'h-[2.5em]',
                       'py-4',
                       'mt-2',
+                      'relative',
+                      'z-0',
                     ])}
                   >
                     {line}
@@ -98,42 +151,15 @@ export const HeroStage = ({
                 )
             )}
           </AnimatePresence>
-          {contactServices && (
-            <ContactServices
-              entries={contactServices as Record<ContactProvider, string>}
-              key={contactServices._key}
+          {contact && (
+            <ContactModule
+              entries={contact as Record<ContactProvider, string>}
+              className='relative z-10'
               selection={['mail', 'github', 'instagram', 'xing', 'linkedin']}
             />
           )}
         </div>
-        <div
-          className={clsx([
-            'flex',
-            'flex-col',
-            'justify-center',
-            'items-center',
-          ])}
-        >
-          {portrait && (
-            <Image
-              src={portrait.url}
-              sizes='100vw'
-              width={portrait.metadata.dimensions.width}
-              height={portrait.metadata.dimensions.height}
-              alt=''
-              style={{
-                display: 'block',
-                width: '100%',
-                height: '100%',
-                maxHeight: 'calc(100vh - 2 * var(--header-height))',
-                pointerEvents: 'none',
-                flexShrink: 1,
-                objectFit: 'contain',
-              }}
-            />
-          )}
-        </div>
       </div>
-    </Section>
+    </section>
   );
 };

@@ -39,7 +39,7 @@ export default createConfig({
         params.set('preview', 'true');
         params.set('dataset', dataset);
 
-        return `${import.meta.env.BASE_URL}/posts/${slug}?${params}`;
+        return `${import.meta.env.SITE_URL}/posts/${slug}?${params}`;
       }
 
       return prev;
@@ -56,10 +56,14 @@ export default createConfig({
               .title('Home')
               .icon(() =>
                 React.createElement(Icon, {
-                  icon: 'carbon:home',
+                  icon: 'mdi:home-outline',
                 })
               )
-              .child(S.document().schemaType('home').documentId('home')),
+              .child(
+                S.document()
+                  .schemaType('singleton.home')
+                  .documentId('singleton.home')
+              ),
             S.divider(),
             // S.listItem()
             //   .title('Projects')
@@ -91,50 +95,91 @@ export default createConfig({
             //       ])
             //   ),
 
+            // S.listItem()
+            //   .title('Posts')
+            //   .schemaType('post')
+            //   .icon(() =>
+            //     React.createElement(Icon, {
+            //       icon: 'mdi:file-sign',
+            //     })
+            //   )
+            //   .child(S.documentTypeList('post').title('Posts')),
+
             S.listItem()
-              .title('Posts')
-              .schemaType('post')
+              .title('Blog')
               .icon(() =>
                 React.createElement(Icon, {
-                  icon: 'mdi:file-sign',
-                  width: 30,
-                  height: 30,
+                  icon: 'mdi:newspaper-variant-outline',
                 })
               )
-              .child(S.documentTypeList('post').title('Posts')),
+              .child(
+                S.list()
+                  .title('Blog')
+                  .items([
+                    S.listItem()
+                      .title('Posts')
+                      .icon(() =>
+                        React.createElement(Icon, {
+                          icon: 'mdi:newspaper-variant-outline',
+                        })
+                      )
+                      .child(S.documentTypeList('blog.post')),
+                    S.listItem()
+                      .title('Categories')
+                      .icon(() =>
+                        React.createElement(Icon, {
+                          icon: 'mdi:shape-outline',
+                        })
+                      )
+                      .child(S.documentTypeList('blog.category')),
+                    S.listItem()
+                      .title('Tags')
+                      .icon(() =>
+                        React.createElement(Icon, {
+                          icon: 'mdi:tag-outline',
+                        })
+                      )
+                      .child(S.documentTypeList('blog.tag')),
+                  ])
+              ),
+
             S.listItem()
               .title('Projects')
-              .schemaType('project')
               .icon(() =>
                 React.createElement(Icon, {
-                  icon: 'mdi:folder-open',
-                  width: 30,
-                  height: 30,
+                  icon: 'mdi:code-braces-box',
                 })
               )
-              .child(S.documentTypeList('project').title('Projects')),
-            S.listItem()
-              .title('Categories')
-              .schemaType('category')
-              .icon(() =>
-                React.createElement(Icon, {
-                  icon: 'mdi:clipboard-text-clock',
-                  width: 30,
-                  height: 30,
-                })
-              )
-              .child(S.documentTypeList('category').title('Categories')),
-            S.listItem()
-              .title('Tags')
-              .schemaType('tag')
-              .icon(() =>
-                React.createElement(Icon, {
-                  icon: 'mdi:tag-text',
-                  width: 30,
-                  height: 30,
-                })
-              )
-              .child(S.documentTypeList('tag').title('Tags')),
+              .child(
+                S.list()
+                  .title('Projects')
+                  .items([
+                    S.listItem()
+                      .title('Projects')
+                      .icon(() =>
+                        React.createElement(Icon, {
+                          icon: 'mdi:code-braces-box',
+                        })
+                      )
+                      .child(S.documentTypeList('projects.project')),
+                    S.listItem()
+                      .title('Categories')
+                      .icon(() =>
+                        React.createElement(Icon, {
+                          icon: 'mdi:shape-outline',
+                        })
+                      )
+                      .child(S.documentTypeList('projects.category')),
+                    S.listItem()
+                      .title('Tags')
+                      .icon(() =>
+                        React.createElement(Icon, {
+                          icon: 'mdi:tag-outline',
+                        })
+                      )
+                      .child(S.documentTypeList('projects.tag')),
+                  ])
+              ),
 
             S.divider(),
 
@@ -142,9 +187,7 @@ export default createConfig({
               .title('Settings')
               .icon(() =>
                 React.createElement(Icon, {
-                  icon: 'carbon:settings',
-                  width: 30,
-                  height: 30,
+                  icon: 'mdi:cog',
                 })
               )
               .child(
@@ -153,23 +196,75 @@ export default createConfig({
                   .items([
                     S.listItem()
                       .title('Main')
+                      .id('settings.main')
                       .schemaType('settings.main')
+                      .icon(() =>
+                        React.createElement(Icon, {
+                          icon: 'mdi:cog',
+                        })
+                      )
                       .child(
-                        S.document().schemaType('settings.main').title('Main')
+                        S.document()
+                          .schemaType('settings.main')
+                          .documentId('settings.main')
+                          .title('Main')
                       ),
                     S.listItem()
                       .title('Navigation')
                       .schemaType('settings.navigation')
+                      .icon(() =>
+                        React.createElement(Icon, {
+                          icon: 'mdi:navigation-variant-outline',
+                        })
+                      )
                       .child(
                         S.document()
                           .schemaType('settings.navigation')
+                          .documentId('settings.navigation')
                           .title('Navigation')
                       ),
                     S.listItem()
                       .title('Meta')
                       .schemaType('settings.meta')
+                      .icon(() =>
+                        React.createElement(Icon, {
+                          icon: 'mdi:web',
+                        })
+                      )
                       .child(
-                        S.document().schemaType('settings.meta').title('Meta')
+                        S.document()
+                          .schemaType('settings.meta')
+                          .documentId('settings.meta')
+                          .title('Meta')
+                      ),
+
+                    S.divider(),
+
+                    S.listItem()
+                      .title('Imprint')
+                      .icon(() =>
+                        React.createElement(Icon, {
+                          icon: 'mdi:scale-balance',
+                        })
+                      )
+                      .child(
+                        S.document()
+                          .schemaType('singleton.imprint')
+                          .documentId('singleton.imprint')
+                          .title('Imprint')
+                      ),
+                    S.listItem()
+                      .title('Privacy')
+                      .icon(() =>
+                        React.createElement(Icon, {
+                          icon: 'ic:outline-privacy-tip',
+                        })
+                      )
+                      .child(
+                        S.document()
+                          .schemaType('singleton.privacy')
+                          .documentId('singleton.privacy')
+                          .title('Privacy')
                       ),
                   ])
               ),
@@ -177,14 +272,18 @@ export default createConfig({
             ...S.documentTypeListItems().filter(
               (listItem) =>
                 ![
-                  'home',
-                  'post',
-                  'project',
-                  'category',
-                  'tag',
+                  'projects.project',
+                  'projects.category',
+                  'projects.tag',
+                  'blog.post',
+                  'blog.category',
+                  'blog.tag',
                   'settings.main',
                   'settings.navigation',
                   'settings.meta',
+                  'singleton.home',
+                  'singleton.imprint',
+                  'singleton.privacy',
                 ].includes(listItem.getId() as string)
             ),
           ]),

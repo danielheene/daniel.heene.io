@@ -24,7 +24,7 @@
     }
   },
   "globalEnv": [
-    "BASE_URL",
+    "SITE_URL",
     "SANITY_STUDIO_DATASET",
     "SANITY_STUDIO_API_VERSION",
     "SANITY_STUDIO_API_TOKEN"

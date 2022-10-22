@@ -22,7 +22,7 @@ type ContactProvider =
   | 'linkedin'
   | 'xing';
 
-type ContactService = {
+type ContactItem = {
   name: ContactProvider;
   label: string;
   urlPrefix: string;
@@ -31,7 +31,7 @@ type ContactService = {
 
 type ContactData = Record<ContactProvider, string>;
 
-const CONTACT_SERVICES: ContactService[] = [
+const CONTACT_SERVICES: ContactItem[] = [
   {
     name: 'github',
     label: 'GitHub',
@@ -108,13 +108,13 @@ const resolveInitialState = (data: Partial<ContactData>): ContactData =>
   Object.fromEntries(
     CONTACT_SERVICES.sort((a, b) =>
       a.name > b.name ? 1 : a.name < b.name ? -1 : 0
-    ).map(({ name }: ContactService) => [
+    ).map(({ name }: ContactItem) => [
       name,
       data[name] || INITIAL_CONTACT_VALUES[name],
     ])
   ) as ContactData;
 
-const ContactServicePrefix = styled(Box)<{
+const ContactItemPrefix = styled(Box)<{
   padding: number | number[];
   labelWidth: string | null;
 }>`
@@ -141,7 +141,7 @@ const ContactServicePrefix = styled(Box)<{
     labelWidth ? `& + span input {  padding-left: ${labelWidth} }` : ''}
 `;
 
-interface ContactServicesInputProps {
+interface ContactInputProps {
   value: ContactData;
   compareValue?: ContactData;
   schemaType: ObjectSchemaTypeWithOptions;
@@ -156,11 +156,8 @@ interface ContactServicesInputProps {
   };
 }
 
-export const ContactServicesInput = forwardRef(
-  (
-    props: ContactServicesInputProps,
-    ref: Ref<HTMLInputElement>
-  ): JSX.Element => {
+export const ContactInput = forwardRef(
+  (props: ContactInputProps, ref: Ref<HTMLInputElement>): JSX.Element => {
     const { value, compareValue, onChange, schemaType } = props;
     const [labelSizes, setLabelSizes] = useState(INITIAL_LABEL_SIZES);
     const [data, setData] = useState<ContactData>(
@@ -217,7 +214,7 @@ export const ContactServicesInput = forwardRef(
           {schemaType.fields.map(({ name }) => {
             const { icon, urlPrefix } = CONTACT_SERVICES.find(
               (service) => service.name === name
-            ) as ContactService;
+            ) as ContactItem;
 
             const inputPrefix = urlPrefix
               .replace('https://www.', '')
@@ -230,14 +227,14 @@ export const ContactServicesInput = forwardRef(
                   position: 'relative',
                 }}
               >
-                <ContactServicePrefix
+                <ContactItemPrefix
                   ref={calculateItemWidth}
                   labelWidth={labelSizes[name as ContactProvider]}
                   padding={[2, 3, 4]}
                   data-provider={name}
                 >
                   <Code>{inputPrefix}</Code>
-                </ContactServicePrefix>
+                </ContactItemPrefix>
                 <TextInput
                   ref={ref}
                   key={name}

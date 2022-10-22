@@ -15,12 +15,6 @@ module.exports = {
         'fade-in': 'fade-in 0.3s ease-in-out forwards',
       },
       backgroundImage: {
-        'vibrant-light-blue':
-          'linear-gradient(-225deg, #9EFBD3 0%, #57E9F2 48%, #45D4FB 100%)',
-        'vibrant-night-call':
-          'linear-gradient(-225deg, #AC32E4 0%, #7918F2 48%, #4801FF 100%)',
-        'vibrant-smart-indigo':
-          'linear-gradient(to top, #b224ef 0%, #7579ff 100%);',
         'vibrant-october-silence':
           'linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);',
         'vibrant-deep-blue':
@@ -344,12 +338,9 @@ module.exports = {
       },
       fontFamily: {
         'sans': ['Inter', ...defaultTheme.fontFamily.sans],
-        'mono': ['Space Mono', ...defaultTheme.fontFamily.sans],
+        'mono': ['JetBrains Mono', ...defaultTheme.fontFamily.sans],
         'inter': ['Inter', ...defaultTheme.fontFamily.sans],
-        'inter-tight': ['Inter Tight', ...defaultTheme.fontFamily.sans],
-        'recursive': ['Recursive', ...defaultTheme.fontFamily.sans],
-        'space-grotesk': ['Space Grotesk', ...defaultTheme.fontFamily.sans],
-        'space-mono': ['Space Mono', ...defaultTheme.fontFamily.sans],
+        'jetbrains-mono': ['JetBrains Mono', ...defaultTheme.fontFamily.sans],
         'syne': ['Syne', ...defaultTheme.fontFamily.sans],
       },
       fontSize: {
@@ -392,9 +383,26 @@ module.exports = {
         'menu-button': 1200,
         'max': 2147483647,
       },
+      lineClamp: {
+        1: '1',
+        2: '2',
+        3: '3',
+        4: '4',
+        5: '5',
+        6: '6',
+        7: '7',
+        8: '8',
+        9: '9',
+        10: '10',
+      },
     },
   },
-  variants: {},
+  variants: {
+    lineClamp: ['responsive', 'hover'],
+  },
+  corePlugins: {
+    aspectRatio: false,
+  },
   plugins: [
     plugin(function ({ addBase, addComponents, theme }) {
       addBase({
@@ -405,7 +413,7 @@ module.exports = {
       addComponents({
         '.glass': {
           backdropFilter: 'blur(10px)',
-          boxShadow: '0 0 5px rgba(0, 0, 0, 0.3)',
+          // boxShadow: '0 0 5px rgba(0, 0, 0, 0.3)',
           color: 'rgba(255, 255, 255, 1)',
           userSelect: 'none',
         },
@@ -419,6 +427,7 @@ module.exports = {
         },
       });
     }),
+    require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/forms'),
     require('@tailwindcss/line-clamp'),
     require('@tailwindcss/typography'),

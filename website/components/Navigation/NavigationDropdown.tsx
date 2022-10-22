@@ -113,7 +113,7 @@ const itemIds = [0, 1, 2, 3, 4];
 
 const sidebar = {
   open: (height = 1000) => ({
-    clipPath: `circle(${height * 2 + 200}px at 100% 50%)`,
+    clipPath: `circle(${height * 2 + 200}px at 100% 0%)`,
     opacity: 1,
     transition: {
       type: 'spring',
@@ -122,7 +122,7 @@ const sidebar = {
     },
   }),
   closed: {
-    clipPath: 'circle(1px at 100% 50%)',
+    clipPath: 'circle(1px at 100% 0%)',
     opacity: 1,
     transition: {
       delay: 0.5,
@@ -132,7 +132,6 @@ const sidebar = {
     },
     transitionEnd: {
       opacity: 0,
-      width: 0,
     },
   },
 };
@@ -207,12 +206,13 @@ export const NavigationDropdown = ({
           'absolute',
           'top-0',
           'right-0',
-          'w-[425px]',
-          'w-max-screen',
+          'w-screen',
+          // 'w-max-screen',
           'h-screen',
           'z-off-canvas',
           'pointer-events-none',
           !showNavigation && 'pointer-events-none',
+          className,
         ])}
       >
         <motion.div
@@ -223,8 +223,7 @@ export const NavigationDropdown = ({
             'right-0',
             'w-full',
             'h-full',
-            'bg-white/40',
-            'border-white/30',
+            'bg-white/50',
             'z-off-canvas',
             'backdrop-blur-2xl',
           ])}
