@@ -1,20 +1,22 @@
-export const speed = 350;
 export const container = {
-  hidden: {
-    opacity: 0,
-    // transition: {
-    //   duration: speed / 1000,
-    //   delay: 0.2,
-    //   ease: 'linear',
-    //   when: 'beforeChildren',
-    // },
-  },
-  show: {
+  hidden: { opacity: 1, scale: 0 },
+  visible: {
     opacity: 1,
-    // transition: {
-    //   duration: speed / 1000,
-    //   ease: 'linear',
-    //   when: 'beforeChildren',
-    // },
+    scale: 1,
+    transition: {
+      delayChildren: 0.3,
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+export const item = {
+  hidden: {
+    y: 35,
+    opacity: 0,
+  },
+  visible: {
+    y: 0,
+    opacity: 1,
   },
 };

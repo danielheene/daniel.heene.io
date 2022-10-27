@@ -8,6 +8,7 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
     './layouts/**/*.{js,ts,jsx,tsx}',
     './pages/**/*.{js,ts,jsx,tsx}',
+    './lib/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
@@ -414,9 +415,12 @@ module.exports = {
         h3: { fontSize: theme('fontSize.lg') },
       });
       addComponents({
+        '.drop-shadow-card-header': {
+          filter:
+            'drop-shadow(0 0 25px rgb(0 0 0 / 0.15)) drop-shadow(0 0 15px rgb(0 0 0 / 0.4)) drop-shadow(0 0 10px rgb(0 0 0 / 0.5))',
+        },
         '.glass': {
           backdropFilter: 'blur(10px)',
-          // boxShadow: '0 0 5px rgba(0, 0, 0, 0.3)',
           color: 'rgba(255, 255, 255, 1)',
           userSelect: 'none',
         },
@@ -430,7 +434,6 @@ module.exports = {
         },
       });
     }),
-    require('tailwindcss-animate'),
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/forms'),
     require('@tailwindcss/line-clamp'),

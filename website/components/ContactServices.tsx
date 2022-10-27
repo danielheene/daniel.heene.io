@@ -72,7 +72,9 @@ export const ContactModule = ({
               'active:outline-0',
               'duration-100',
               'rounded-lg',
-              small ? ['text-2xl', 'p-1.5'] : ['text-3xl', 'p-1.5', 'sm:p-2.5'],
+              small
+                ? ['text-2xl', 'px-1.5', 'py-2']
+                : ['text-3xl', 'p-1.5', 'sm:p-2.5'],
             ])}
           >
             <Icon icon={icon} className='fill-white' />

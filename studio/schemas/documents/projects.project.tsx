@@ -51,6 +51,11 @@ export default defineType({
           type: 'object',
           fields: [
             {
+              title: 'Label',
+              name: 'label',
+              type: 'string',
+            },
+            {
               title: 'Icon',
               name: 'icon',
               type: 'string',

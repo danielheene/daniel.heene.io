@@ -1,4 +1,4 @@
-import React, { ReactElement, useMemo } from 'react';
+import React, { ReactElement, useCallback, useMemo } from 'react';
 
 import { DefaultLayout } from '@layouts/Default.layout';
 import { NextPageWithLayout, ProjectProjectData } from '@lib/types';
@@ -9,20 +9,25 @@ import Sanity, {
   projectUrlsQuery,
   projectQuery,
 } from '@lib/sanity';
-import Link from 'next/link';
 import { Image } from '@components/Image';
 import { Typography } from '@components/Typography';
 import clsx from 'clsx';
 import { useAppStore } from '@lib/appStore';
 import { useRouter } from 'next/router';
 import { Icon } from '@iconify/react';
+import * as Tooltip from '@radix-ui/react-tooltip';
 
 interface Props extends ProjectProjectData {}
 
 const ProjectPage: NextPageWithLayout<Props> = (props, context) => {
   const router = useRouter();
-  const { title, subtitle, poster, category, body } = props;
+  const { title, subtitle, poster, category, body, links = [] } = props;
   const { previousRoute } = useAppStore();
+
+  const handleGoBackClick = useCallback(
+    () => (previousRoute ? router.back() : router.push('/')),
+    [router, previousRoute]
+  );
 
   return (
     <>
@@ -67,27 +72,63 @@ const ProjectPage: NextPageWithLayout<Props> = (props, context) => {
             'flex',
             'flex-col',
             'md:flex-row',
-            'justify-end',
+            'justify-between',
+            'text-2xl',
           ])}
         >
-          <button
+          <Typography
+            as='button'
+            variant='button-outlined'
+            onClick={handleGoBackClick}
+          >
+            <Icon className='text-3xl' icon='mdi:arrow-left' />
+            Go Back
+          </Typography>
+          <div
             className={clsx([
-              'text-2xl',
               'flex',
               'flex-row',
-              'gap-1',
-              'font-mono',
-              'uppercase',
               'items-center',
-              'font-semibold',
-              'mr-auto',
+              'justify-center',
+              'gap-4',
             ])}
-            onClick={() => (previousRoute ? router.back() : router.push('/'))}
           >
-            <Icon className={'text-3xl'} icon='mdi:arrow-left' />
-            Go Back
-          </button>
-          <div></div>
+            {Array.isArray(links) &&
+              links.map(({ url, icon, label }) => {
+                const link = useMemo(
+                  () => (
+                    <a href={url} className='text-[140%] rounded-lg p-1.5'>
+                      <Icon icon={icon} />
+                    </a>
+                  ),
+                  []
+                );
+
+                return label ? (
+                  <Tooltip.Root key={url} delayDuration={0}>
+                    <Tooltip.Trigger asChild>{link}</Tooltip.Trigger>
+                    <Tooltip.Content sideOffset={4}>
+                      <span
+                        className={clsx([
+                          'text-sm',
+                          'text-zinc-800',
+                          'bg-white',
+                          'rounded-md',
+                          'py-1.5',
+                          'px-2.5',
+                          'font-medium',
+                        ])}
+                      >
+                        {label}
+                      </span>
+                      <Tooltip.Arrow width={11} height={5} fill='white' />
+                    </Tooltip.Content>
+                  </Tooltip.Root>
+                ) : (
+                  <React.Fragment key={url}>{link}</React.Fragment>
+                );
+              })}
+          </div>
         </nav>
 
         {body && (

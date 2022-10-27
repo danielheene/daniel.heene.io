@@ -25,6 +25,7 @@ export interface AppConfigData {
     publicKey: FileAssetFragment;
   };
   mainNavigation: Navigation;
+  footerNavigation: Navigation;
   metaNavigation: Navigation;
   meta: MetaDataConfig;
 }
@@ -79,7 +80,7 @@ export type ImageAssetFragment = {
   altText?: string;
   url: string;
   size: number;
-  previewImage: string;
+  lqip: string;
   palette: ImagePalette;
   dimensions: ImageDimensions;
 } | null;
@@ -257,6 +258,7 @@ export type ProjectProjectData = {
   excerpt: string;
   category: string;
   links: {
+    label: string;
     icon: string;
     url: string;
   }[];

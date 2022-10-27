@@ -29,6 +29,7 @@ export const useAppStore = create<AppStore, [['zustand/immer', AppStore]]>(
     assets: null,
     mainNavigation: null,
     metaNavigation: null,
+    footerNavigation: null,
     meta: {
       defaultTitle: null,
       titleTemplate: null,

@@ -9,7 +9,7 @@ interface DefaultLayoutProps {
 }
 
 export function DefaultLayout({ children, ...props }: DefaultLayoutProps) {
-  const { metaNavigation, contact, meta } = useAppStore();
+  const { metaNavigation, footerNavigation, contact, meta } = useAppStore();
 
   return (
     <div id='layout'>
@@ -20,7 +20,11 @@ export function DefaultLayout({ children, ...props }: DefaultLayoutProps) {
       {/*  description={pageProps.description}*/}
       {/*/>*/}
       <main>{children}</main>
-      <Footer contact={contact} metaNavigation={metaNavigation} />
+      <Footer
+        contact={contact}
+        metaNavigation={metaNavigation}
+        footerNavigation={footerNavigation}
+      />
     </div>
   );
 }

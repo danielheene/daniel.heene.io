@@ -5,10 +5,15 @@ import { ContactModuleData, Navigation } from '@lib/types';
 
 interface FooterProps {
   metaNavigation: Navigation;
+  footerNavigation: Navigation;
   contact: ContactModuleData;
 }
 
-export const Footer = ({ contact, metaNavigation }: FooterProps) => {
+export const Footer = ({
+  contact,
+  metaNavigation,
+  footerNavigation,
+}: FooterProps) => {
   return (
     <footer
       className={clsx([
@@ -36,12 +41,49 @@ export const Footer = ({ contact, metaNavigation }: FooterProps) => {
             'py-6',
           ])}
         >
+          {footerNavigation && (
+            <nav
+              className={clsx([
+                'flex',
+                'flex-wrap',
+                'justify-center',
+                'md:justify-start',
+                'gap-x-4',
+                'gap-y-2',
+                'md:gap-6',
+              ])}
+              aria-label={footerNavigation.label}
+            >
+              {footerNavigation.entries.map((entry) => (
+                <NavigationItem key={entry._key} {...entry} />
+              ))}
+            </nav>
+          )}
+
+          <div className='flex gap-4'>
+            {contact && <ContactModule entries={contact} small />}
+          </div>
+        </div>
+        <div
+          className={clsx([
+            'text-center',
+            'hover:text-white',
+            'text-white',
+            'text-sm',
+            'font-mono',
+            'font-semibold',
+            'py-6',
+            'flex',
+            'flex-col',
+            'md:flex-row',
+            'justify-between',
+            'gap-4',
+            'md:gap-8',
+          ])}
+        >
           {metaNavigation && (
             <nav
               className={clsx([
-                'text-white',
-                'font-medium',
-                'hover:text-white',
                 // 'transition-colors',
                 'duration-200',
                 'flex',
@@ -59,13 +101,9 @@ export const Footer = ({ contact, metaNavigation }: FooterProps) => {
               ))}
             </nav>
           )}
-
-          <div className='flex gap-4'>
-            {contact && <ContactModule entries={contact} small />}
-          </div>
-        </div>
-        <div className='text-white text-sm font-semibold text-center py-8'>
-          © {new Date().getFullYear()} - Daniel Heene - All rights reserved.
+          <span className='text-center'>
+            © {new Date().getFullYear()} - Daniel Heene - All rights reserved.
+          </span>
         </div>
       </div>
     </footer>

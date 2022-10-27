@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { useRef } from 'react';
 import clsx from 'clsx';
 
 import { Card } from '@components/Card';
 import { Section, SectionHeader } from '@components/Section';
 import { QualificationItemData, QualificationsSectionData } from '@lib/types';
-import { useIntersectionObserver } from '@lib/hooks';
+import { motion, useInView } from 'framer-motion';
+import { staggerTransition } from '@lib/transitions';
 
 interface QualificationEntryProps extends QualificationItemData {
   index: number;
@@ -20,23 +21,28 @@ const QualificationEntry = ({
   body,
 }: QualificationEntryProps): JSX.Element => {
   const isOdd = !(index % 2);
-  const [isInView, ref] = useIntersectionObserver({});
+  const ref = useRef<HTMLDivElement>();
+  const isInView = useInView(ref, {
+    once: true,
+    amount: 'some',
+    margin: '-35%',
+  });
 
   return (
-    <div className='grid grid-cols-2'>
+    <motion.div
+      ref={ref}
+      className='grid grid-cols-2'
+      initial='hidden'
+      animate={isInView ? 'visible' : 'hidden'}
+      variants={staggerTransition.item}
+    >
       <div
-        ref={ref}
         className={clsx([
           'col-span-full',
+          'my-16',
           'lg:col-span-1',
           isOdd ? 'lg:col-start-1' : 'lg:col-start-2',
-          'px-4',
-          'animate-in',
-          'fade-in',
-          'slide-in-from-bottom',
-          'fill-mode-forwards',
-          'duration-700',
-          isInView ? 'running' : 'paused',
+          'lg:px-4',
         ])}
       >
         <div
@@ -106,13 +112,12 @@ const QualificationEntry = ({
               ])}
             >
               {end ? `${start} - ${end}` : `since ${start}`}
-              {/*{start} - {end}*/}
             </span>
             <p className='font-medium text-base text-white/70'>{body}</p>
           </Card>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

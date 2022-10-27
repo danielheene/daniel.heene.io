@@ -1,16 +1,14 @@
-import { Layout } from '@layouts/index';
 import { NextPageWithLayout } from '@lib/types';
 import { useRouter } from 'next/router';
 import { useAppStore } from '@lib/appStore';
 import clsx from 'clsx';
 import { Typography } from '@components/Typography';
-import { Image } from '@components/Image';
 import { Icon } from '@iconify/react';
 import { PortableText } from '@components/PortableText';
 import React, { ReactElement } from 'react';
 import { DefaultLayout } from '@layouts/Default.layout';
 import { GetStaticProps } from 'next';
-import Sanity, { appConfigQuery, pageQuery } from '@lib/sanity';
+import Sanity, { appConfigQuery, imprintQuery } from '@lib/sanity';
 import { TypedObject } from '@sanity/types';
 
 const ImprintPage: NextPageWithLayout = (props, context) => {
@@ -91,7 +89,7 @@ export const getStaticProps: GetStaticProps<{
   try {
     const SanityClient = Sanity.getClient(preview);
     const appConfig = await SanityClient.fetch(appConfigQuery);
-    const data = await SanityClient.fetch(pageQuery, { slug: 'imprint' });
+    const data = await SanityClient.fetch(imprintQuery);
 
     return {
       props: {

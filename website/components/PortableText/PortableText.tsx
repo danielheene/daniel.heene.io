@@ -6,8 +6,6 @@ import {
   PortableTextComponents,
   toPlainText,
   PortableTextBlockComponent,
-  PortableTextTypeComponent,
-  PortableTextTypeComponentProps,
   PortableTextProps as PortableTextBaseProps,
   PortableTextComponent,
 } from '@portabletext/react';
@@ -15,11 +13,15 @@ import React, { useMemo } from 'react';
 import { Image } from '@components/Image';
 import clsx, { ClassValue } from 'clsx';
 import slugify from 'slugify';
-import { resolveReferenceUrl } from '@lib/utils';
 import { log } from 'next-axiom';
 
 const resolveId = (value): string =>
-  slugify(toPlainText(value), { lower: true, trim: true, strict: true });
+  slugify(toPlainText(value), {
+    locale: 'de',
+    lower: true,
+    trim: true,
+    strict: true,
+  });
 
 const LinkableH2: PortableTextBlockComponent = ({ children, value }) => (
   <h2 id={resolveId(value)}>{children}</h2>
@@ -31,6 +33,16 @@ const LinkableH4: PortableTextBlockComponent = ({ children, value }) => (
   <h4 id={resolveId(value)}>{children}</h4>
 );
 const ImageComponent = ({ value, isInline }) => (
+  <figure
+    className='w-8/12 mx-auto relative'
+    style={{ aspectRatio: value.dimensions.aspectRatio.toFixed(2) }}
+  >
+    <Image image={value} />
+  </figure>
+);
+
+const ImageCarouselComponent = ({ value, isInline }) => (
+
   <figure
     className='w-8/12 mx-auto relative'
     style={{ aspectRatio: value.dimensions.aspectRatio.toFixed(2) }}
@@ -54,8 +66,6 @@ interface PortableTextProps extends PortableTextBaseProps {
 export const PortableText = ({ className, ...props }: PortableTextProps) => {
   const { value } = props;
 
-  console.log(value)
-
   const components: PortableTextComponents = useMemo(
     () =>
       mergeComponents(defaultComponents, {
@@ -66,10 +76,10 @@ export const PortableText = ({ className, ...props }: PortableTextProps) => {
         },
         types: {
           'object.image': ImageComponent,
-          'block.images': ({ value, index, isInline, renderNode }) => (
+          'object.images': ({ value, index, isInline, renderNode }) => (
             <Image key={value._key} image={value} />
           ),
-          'block.code': CodeComponent,
+          'object.code': CodeComponent,
         },
       }),
 

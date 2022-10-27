@@ -13,7 +13,7 @@ interface MarqueeProps {
 export const Marquee = memo(
   ({ children, offset = 25, speed = 10, reverse = false }: MarqueeProps) => {
     const marqueeId = useId();
-    const [marqueeSpeed, setMarqueeSpeed] = useState<number>();
+    const [marqueeSpeed, setMarqueeSpeed] = useState<number>(speed);
 
     useOnResizeCallback((event: Event) => {
       const width = get(
@@ -21,10 +21,10 @@ export const Marquee = memo(
         'currentTarget.innerWidth',
         get(event, 'target.innerWidth', null)
       );
-      if (width >= 1200) setMarqueeSpeed(speed);
       if (width >= 800 && width < 1200) setMarqueeSpeed(speed * 0.9);
       if (width >= 540 && width < 800) setMarqueeSpeed(speed * 0.75);
       if (width < 540) setMarqueeSpeed(0.5 * speed);
+      setMarqueeSpeed(speed);
     }, []);
 
     const adjustedChildren = useMemo(() => {

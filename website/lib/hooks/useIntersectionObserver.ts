@@ -23,13 +23,13 @@ export const useIntersectionObserver = (
       observer.observe(elementRef.current);
     }
 
-    if (isIntersecting && triggerOnce && elementRef.current) {
+    if (isIntersecting && triggerOnce && elementRef.current && observer) {
       observer.unobserve(elementRef.current);
       observer = null;
     }
 
     return () => {
-      if (observer.unobserve && elementRef.current) {
+      if (elementRef.current && observer) {
         observer.unobserve(elementRef.current);
         observer = null;
       }

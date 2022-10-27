@@ -23,7 +23,7 @@ export const Image = memo(
     quality,
     sharpen,
     saturation,
-    className,
+    className = '',
     sizes = '100vw',
     loading = 'lazy',
     ...props
@@ -46,9 +46,12 @@ export const Image = memo(
         src={url}
         sizes={sizes}
         loading={loading}
-        blurDataURL={image.previewImage}
-        placeholder={!!image.previewImage ? 'blur' : undefined}
-        className={clsx('object-cover', className)}
+        blurDataURL={image.lqip}
+        placeholder={!!image.lqip ? 'blur' : undefined}
+        className={clsx(
+          !className.includes('object-') && 'object-cover',
+          className
+        )}
         fill
         {...props}
         alt={props?.alt ?? image?.originalFilename ?? ''}

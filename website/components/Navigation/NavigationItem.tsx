@@ -2,6 +2,7 @@ import { NavigationItem as NavigationItemType } from '@lib/types';
 import Link from 'next/link';
 import { memo } from 'react';
 import { Typography } from '@components/Typography';
+import { Icon } from '@iconify/react';
 
 type NavigationItemProps = NavigationItemType;
 export const NavigationItem = memo(
@@ -27,11 +28,14 @@ export const NavigationItem = memo(
             variant={`button-${mode}`}
             key={_key}
             href={url}
-            target={blank && '_blank'}
-            rel={blank && 'noopener noreferrer'}
+            target={blank ? '_blank' : undefined}
+            rel={blank ? 'noopener noreferrer' : undefined}
             download={forceDownload}
           >
             {label}
+            {forceDownload && (
+              <Icon icon='mdi:tray-arrow-down' className='ml-2 text-[120%]' />
+            )}
           </Typography>
         );
       }
@@ -43,11 +47,18 @@ export const NavigationItem = memo(
             <Typography
               as='a'
               variant={`button-${mode}`}
-              download={(forceDownload && originalFilename) || forceDownload}
-              target={blank && '_blank'}
-              rel={blank && 'noopener noreferrer'}
+              download={
+                !!originalFilename && !!forceDownload
+                  ? originalFilename
+                  : !!forceDownload
+              }
+              target={blank ? '_blank' : undefined}
+              rel={blank ? 'noopener noreferrer' : undefined}
             >
               {label}
+              {forceDownload && (
+                <Icon icon='mdi:tray-arrow-down' className='ml-2 text-[120%]' />
+              )}
             </Typography>
           </Link>
         );

@@ -17,6 +17,7 @@ import '../styles/globals.css';
 import '../styles/font-inter.css';
 import '../styles/font-jetbrains-mono.css';
 import '../styles/font-syne.css';
+import { Tooltip, TooltipProvider } from '@radix-ui/react-tooltip';
 
 export { reportWebVitals } from 'next-axiom';
 export default function App({
@@ -74,7 +75,7 @@ export default function App({
   const id = get(router, 'asPath', 'home');
 
   return (
-    <>
+    <TooltipProvider delayDuration={0}>
       <DefaultSeo {...{ ...SEO, titleTemplate, description, keywords, tags }} />
 
       <LazyMotion features={domAnimation}>
@@ -94,6 +95,6 @@ export default function App({
       )}
       {hireMeWidget && <HireMeMemoji />}
       <GradientBackground darkenTop={true} />
-    </>
+    </TooltipProvider>
   );
 }

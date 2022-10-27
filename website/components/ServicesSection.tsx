@@ -14,7 +14,6 @@ const ServiceItem = ({
   return (
     <div
       className={clsx([
-        'embla__slide',
         'flex',
         'flex-col',
         'flex-grow-0',
@@ -43,22 +42,13 @@ const ServiceItem = ({
 
 export const ServicesSection = (props: ServicesSectionData): JSX.Element => {
   const { header, entries } = props;
-  const [ref] = useEmblaCarousel({
-    slidesToScroll: 3,
-    startIndex: entries.length > 1 ? 1 : 0,
-    loop: true,
-    align: 'center',
-    skipSnaps: false,
-  });
 
   return (
     <Section>
       <SectionHeader {...header} />
 
       <div
-        ref={ref}
         className={clsx([
-          'embla',
           'flex',
           'flex-column',
           'md:flex-row',
@@ -69,11 +59,9 @@ export const ServicesSection = (props: ServicesSectionData): JSX.Element => {
           'overflow-hidden',
         ])}
       >
-        <div className={clsx('embla__container', 'flex')}>
-          {entries.map(({ _key, ...itemProps }) => (
-            <ServiceItem key={_key} {...itemProps} />
-          ))}
-        </div>
+        {entries.map(({ _key, ...itemProps }) => (
+          <ServiceItem key={_key} {...itemProps} />
+        ))}
       </div>
     </Section>
   );

@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import Image from 'next/future/image';
 import clsx, { ClassValue } from 'clsx';
 
 import { useAppStore } from '@lib/appStore';
 import { ContactProvider, HeroStageData } from '@lib/types';
 import { ContactModule } from '@components/ContactServices';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Image } from '@components/Image';
 
 interface HeroStageProps extends HeroStageData {
   className?: ClassValue | string;
@@ -46,7 +46,6 @@ export const HeroStage = ({
           'justify-center',
           'items-start',
           'lg:items-center',
-          // 'lg:min-h-screen',
           'lg:min-h-[var(--stage-height)]',
           'mb-[var(--header-height)]',
           'gap-16',
@@ -55,40 +54,39 @@ export const HeroStage = ({
       >
         <div
           className={clsx([
-            'flex',
-            'flex-col',
-            'justify-center',
-            'items-center',
             'order-1',
             'lg:order-2',
             'w-full',
-            'p-0',
             'sm:p-24',
             'lg:p-0',
-            // 'mt-[var(--header-height)]',
-            'lg:mt-0',
           ])}
         >
           {portrait && (
-            <Image
-              src={portrait.url}
-              sizes='100vw'
-              width={portrait.dimensions.width}
-              height={portrait.dimensions.height}
-              alt=''
+            <div
               className={clsx([
-                'block',
-                'w-10/12',
-                'sm:w-full',
-                'h-full',
-                'pointer-events-none',
-                'object-contain',
-                'flex-shrink-1',
+                'w-full',
+                'relative',
+                'aspect-w-square',
+                'aspect-h-square',
               ])}
-              style={{
-                maxHeight: 'calc(100vh - 2 * var(--header-height))',
-              }}
-            />
+            >
+              <Image
+                image={portrait}
+                alt='Portrait Daniel Heene'
+                className={clsx([
+                  'block',
+                  'w-10/12',
+                  'sm:w-full',
+                  'h-full',
+                  'pointer-events-none',
+                  'object-contain',
+                  'flex-shrink-1',
+                ])}
+                style={{
+                  maxHeight: 'calc(100vh - 2 * var(--header-height))',
+                }}
+              />
+            </div>
           )}
         </div>
         <div

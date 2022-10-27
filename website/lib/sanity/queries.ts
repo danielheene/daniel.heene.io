@@ -61,6 +61,7 @@ export const projectQuery = groq`
       _type != "object.image" => { ... },
     },
     excerpt,
+    links,
     tags->{ ... },
     "category": category->name,
     metaDescription,
@@ -70,8 +71,8 @@ export const projectQuery = groq`
   }
 `;
 
-export const pageQuery = groq`
-  *[_type == "singleton.**" && !(_id in path("drafts.**")) && slug.current == $slug][0] {
+export const imprintQuery = groq`
+  *[_type == "singleton.imprint" && !(_id in path("drafts.**"))][0] {
     _id,
     _type,
     _rev,
@@ -97,6 +98,10 @@ export const metaNavigationQuery = groq`
   *[_type == "settings.navigation" && defined(meta) && !(_id in path("drafts.**"))][0]{...meta} ${navMenuFragment}
 `;
 
+export const footerNavigationQuery = groq`
+  *[_type == "settings.navigation" && defined(footer) && !(_id in path("drafts.**"))][0]{...footer} ${navMenuFragment}
+`;
+
 export const appConfigQuery = groq`
   {
     ...*[_type == "settings.main" && !(_id match "drafts.*")][0] {
@@ -115,5 +120,6 @@ export const appConfigQuery = groq`
     },
     "mainNavigation": ${mainNavigationQuery},
     "metaNavigation": ${metaNavigationQuery},
+    "footerNavigation": ${footerNavigationQuery},
   }
 `;

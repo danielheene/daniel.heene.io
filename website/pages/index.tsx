@@ -35,7 +35,7 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   const appConfig = await SanityClient.fetch(appConfigQuery);
   const data = await SanityClient.fetch(homeQuery);
 
-  console.log(JSON.stringify(data, null, 2));
+  // console.log(JSON.stringify(data, null, 2));
 
   return {
     props: {
