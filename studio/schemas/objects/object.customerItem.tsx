@@ -31,6 +31,11 @@ export default defineType({
       title: 'Logo',
       name: 'image',
       type: 'image',
+      options: {
+        hotspot: true,
+        storeOriginalFilename: true,
+        metadata: ['lqip', 'palette'],
+      },
     }),
   ],
   // components: {

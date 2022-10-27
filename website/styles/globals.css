@@ -15,7 +15,7 @@
     --tw-ring-offset-color: #0c0e10;
   }
 
-  html.is-loading {
+  .is-loading {
     @apply cursor-wait;
   }
 
@@ -23,24 +23,24 @@
     @apply flex flex-col min-h-screen w-screen;
   }
 
-  #__next {
-    @apply grid min-h-screen w-screen;
-    grid-template-areas: "header" "main" "footer";
+  #layout {
+    @apply flex flex-col min-h-screen w-screen snap-y snap-proximity opacity-100 transition-opacity duration-300;
   }
 
-  #__next > header {
-    height: min-content;
-    grid-area: header;
+  .is-loading #layout {
+    @apply opacity-0 overflow-hidden;
   }
 
-  #__next > main {
-    height: auto;
-    grid-area: main;
+  #layout > :nth-child(1) {
+    @apply h-min flex-grow-0 flex-shrink;
   }
 
-  #__next > footer {
-    height: min-content;
-    grid-area: footer;
+  #layout > :nth-child(2) {
+    @apply h-auto flex-grow flex-shrink-0 snap-start;
+  }
+
+  #layout > :nth-child(3) {
+    @apply h-min flex-grow-0 flex-shrink;
   }
 
   ::selection {

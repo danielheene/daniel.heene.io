@@ -12,7 +12,8 @@ export const FieldConfig = {
     },
     options: {
       source: (doc) => doc.title as string,
-      slugify: (input) => slugify(input),
+      slugify: (input) =>
+        slugify(input, { lower: true, strict: true, trim: true }),
       isUnique: isUniqueAcrossAllDocuments,
     },
   },

@@ -1,5 +1,5 @@
 export const speed = 350;
-export const animation = {
+export const transition = {
   show: {
     opacity: 1,
     transition: {

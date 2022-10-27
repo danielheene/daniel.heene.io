@@ -1,3 +1,5 @@
+import { TypedObject } from '@sanity/types';
+
 export type MetaTag = {
   type: 'name' | 'property' | 'httpEquiv';
   value: string;
@@ -5,6 +7,7 @@ export type MetaTag = {
 };
 
 export type MetaDataConfig = {
+  defaultTitle: string;
   titleTemplate: string;
   description: string;
   keywords: string[];
@@ -76,13 +79,23 @@ export type ImageAssetFragment = {
   altText?: string;
   url: string;
   size: number;
-  blurHash: string;
+  previewImage: string;
   palette: ImagePalette;
   dimensions: ImageDimensions;
 } | null;
 
+export type TypographyVariant =
+  | 'section-title'
+  | 'section-subtitle'
+  | 'section-caption'
+  | 'body'
+  | 'button-default'
+  | 'button-primary'
+  | 'button-outlined'
+  | 'button-ghost';
+
 export type NavigationItemVariant = 'external' | 'internal' | 'file';
-export type NavigationItemMode = 'default' | 'primary' | 'outlined' | 'ghost';
+export type NavigationItemMode = 'default' | 'primary' | 'ghost';
 
 export type NavigationItem = {
   readonly _key: string;
@@ -176,17 +189,6 @@ export type ProjectItemData = {
   image: ImageAssetFragment;
 };
 
-export type ProjectData = {
-  readonly _type: 'projects.project';
-  readonly _key: string;
-
-  header;
-
-  published: boolean;
-  name: string;
-  image: ImageAssetFragment;
-};
-
 export type SectionHeaderData = {
   readonly _type: 'sectionHeader';
   readonly _key: string;
@@ -226,12 +228,41 @@ export type QualificationsSectionData = {
   entries: QualificationItemData[];
 };
 
-export type ProjectsSectionData = {
+export type ProjectTeaserData = {
+  title: string;
+  excerpt: string;
+  category: string;
+  poster: ImageAssetFragment;
+  urlPath: string;
+};
+
+export type ProjectTeaserSectionData = {
   readonly _type: 'section.projects';
   readonly _key: string;
 
   header: SectionHeaderData;
-  entries: ServiceItemData[];
+  projectOne: ProjectTeaserData;
+  projectTwo: ProjectTeaserData;
+  projectThree: ProjectTeaserData;
+  projectFour: ProjectTeaserData;
+};
+
+export type ProjectProjectData = {
+  readonly _type: 'projects.project';
+  readonly _key: string;
+
+  published: boolean;
+  title: string;
+  subtitle: string;
+  excerpt: string;
+  category: string;
+  links: {
+    icon: string;
+    url: string;
+  }[];
+  body: TypedObject | TypedObject[];
+  poster: ImageAssetFragment;
+  urlPath: string;
 };
 
 export type SectionData = QualificationsSectionData | CustomersSectionData;
@@ -242,4 +273,5 @@ export type HomeData = {
   customers: CustomersSectionData;
   qualifications: QualificationsSectionData;
   services: ServicesSectionData;
+  projectTeaser: ProjectTeaserSectionData;
 };

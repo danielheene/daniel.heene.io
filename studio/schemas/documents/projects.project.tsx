@@ -1,5 +1,6 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import { COL_FIELDSETS, FieldConfig } from '../_shared';
+import { Icon } from '@iconify/react';
 
 export default defineType({
   title: 'Project',
@@ -35,13 +36,53 @@ export default defineType({
       group: ['main', 'meta'],
     }),
     defineField({
+      title: 'Sub-Title',
+      name: 'subTitle',
+      type: 'string',
+      group: 'main',
+    }),
+    defineField({
+      title: 'Links',
+      name: 'links',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          name: 'link',
+          type: 'object',
+          fields: [
+            {
+              title: 'Icon',
+              name: 'icon',
+              type: 'string',
+            },
+            {
+              title: 'URL',
+              name: 'url',
+              type: 'url',
+            },
+          ],
+          preview: {
+            select: {
+              icon: 'icon',
+              url: 'url',
+            },
+            prepare: ({ url, icon }) => ({
+              title: url,
+              media: <Icon icon={icon} />,
+            }),
+          },
+        }),
+      ],
+      group: 'main',
+    }),
+    defineField({
       title: 'Poster',
       name: 'poster',
       type: 'image',
       options: {
         hotspot: true,
         storeOriginalFilename: true,
-        metadata: ['blurhash', 'palette'],
+        metadata: ['lqip', 'palette'],
       },
       group: 'main',
     }),
@@ -49,7 +90,7 @@ export default defineType({
       title: 'Excerpt',
       name: 'excerpt',
       type: 'text',
-      rows: 4,
+      rows: 3,
       group: 'main',
     }),
     defineField({
@@ -64,33 +105,8 @@ export default defineType({
       name: 'tags',
       type: 'array',
       initialValue: [],
-      of: [{ type: 'projects.tag' }],
+      of: [{ type: 'reference', to: [{ type: 'projects.tag' }] }],
       group: 'main',
-    }),
-    defineField({
-      title: 'Resources',
-      name: 'resources',
-      type: 'array',
-      initialValue: [],
-      group: 'main',
-      of: [
-        defineArrayMember({
-          name: 'resource',
-          type: 'object',
-          fields: [
-            defineField({
-              title: 'Name',
-              name: 'name',
-              type: 'string',
-            }),
-            defineField({
-              title: 'URL',
-              name: 'url',
-              type: 'url',
-            }),
-          ],
-        }),
-      ],
     }),
     defineField({
       title: 'Body',

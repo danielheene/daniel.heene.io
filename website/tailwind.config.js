@@ -13,6 +13,8 @@ module.exports = {
     extend: {
       animation: {
         'fade-in': 'fade-in 0.3s ease-in-out forwards',
+        'slide-up':
+          'slide-up 0.3s ease-in-out var(--slide-up-delay, 0) forwards',
       },
       backgroundImage: {
         'vibrant-october-silence':
@@ -21,6 +23,7 @@ module.exports = {
           'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
         'vibrant-box':
           'linear-gradient(to left top, #5022f2, #7a0ed8, #8e00bf, #9900a8, #9d1094)',
+        'headline': 'linear-gradient( 135deg, #3C8CE7 10%, #00EAFF 100%)',
       },
       backgroundOpacity: {
         15: '0.15',
@@ -427,6 +430,7 @@ module.exports = {
         },
       });
     }),
+    require('tailwindcss-animate'),
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/forms'),
     require('@tailwindcss/line-clamp'),

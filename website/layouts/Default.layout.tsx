@@ -1,26 +1,26 @@
-import { NextSeo } from 'next-seo';
-import React, { ComponentProps, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { Header } from '@components/Header';
 import { Footer } from '@components/Footer/Footer';
 import { useAppStore } from '@lib/appStore';
+import { NextSeo } from 'next-seo';
 
 interface DefaultLayoutProps {
   children?: ReactNode | ReactNode[];
-  seo?: Partial<ComponentProps<typeof NextSeo>>;
 }
 
-export function DefaultLayout({ children, seo }: DefaultLayoutProps) {
-  // const seoProps = useSeoProps(seo);
-  const { metaNavigation, contact } = useAppStore();
+export function DefaultLayout({ children, ...props }: DefaultLayoutProps) {
+  const { metaNavigation, contact, meta } = useAppStore();
 
   return (
-    <>
-      {/*<Head></Head>*/}
+    <div id='layout'>
       <Header />
+      {/*<NextSeo*/}
+      {/*  title={props.title}*/}
+      {/*  titleTemplate={appConfig.titleTemplate}*/}
+      {/*  description={pageProps.description}*/}
+      {/*/>*/}
       <main>{children}</main>
-      {!!metaNavigation && !!contact && (
-        <Footer contact={contact} metaNavigation={metaNavigation} />
-      )}
-    </>
+      <Footer contact={contact} metaNavigation={metaNavigation} />
+    </div>
   );
 }

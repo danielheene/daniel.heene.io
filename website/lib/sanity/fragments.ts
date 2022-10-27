@@ -21,7 +21,9 @@ export const imageFragment = `
       mimeType,
       size,
       ...metadata {
-        blurHash,
+        hasAlpha,
+        isOpaque,
+        lqip,
         palette,
         dimensions
       }
@@ -35,6 +37,16 @@ export const urlPathFromSlugFragment = `
     string::startsWith(_type, "projects") => "/projects/",
     string::startsWith(_type, "blog") => "/blog/",
   ) + slug.current
+`;
+
+export const projectTeaserFragment = `
+  {
+    title,
+    excerpt,
+    "urlPath": ${urlPathFromSlugFragment},
+    poster ${imageFragment},
+    ...category->{ "category": name },
+  }
 `;
 
 export const navItemFragment = `

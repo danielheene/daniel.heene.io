@@ -4,3 +4,4 @@ export { useDebounce } from './useDebounce';
 export { useFocusTrap } from './useFocusTrap';
 export { useDimensions } from './useDimension';
 export { useCreatePortalHost} from './useCreatePortalHost'
+export { useIntersectionObserver }from './useIntersectionObserver'

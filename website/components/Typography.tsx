@@ -1,62 +1,46 @@
-import React, {
-  createRef,
-  ElementType,
-  ForwardedRef,
-  forwardRef,
-  memo,
-  useMemo,
-} from 'react';
+import React from 'react';
 import clsx, { ClassValue } from 'clsx';
 
-import { Box } from '@components/Box';
 import { mergeRefs } from '@lib/utils';
+import {
+  PolymorphicComponentPropWithRef,
+  PolymorphicRef,
+  TypographyVariant,
+} from '@lib/types';
 
-type TypographyVariant =
-  | 'heading'
-  | 'sub-heading'
-  | 'section-heading'
-  | 'section-subheading'
-  | 'section-caption'
-  | 'body'
-  | 'body-small'
-  | 'nav-item'
-  | 'nav-item-primary';
+const defaultElement = 'span';
 
-interface TypographyProps {
-  as?: ElementType;
-  children: React.ReactNode | React.ReactNode[];
-  variant: `${TypographyVariant}`;
-  className?: ClassValue;
-}
+type TypographyProps<C extends React.ElementType> =
+  PolymorphicComponentPropWithRef<
+    C,
+    {
+      // as?: ElementType;
+      children: React.ReactNode | React.ReactNode[];
+      variant: `${TypographyVariant}`;
+      className?: ClassValue;
+    }
+  >;
 
-export const Typography = memo(
-  forwardRef(
-    (props: TypographyProps, forwardedRef: ForwardedRef<HTMLSpanElement>) => {
-      const { as, children, className, variant, ...boxProps } = props;
+type TypographyComponent = <
+  C extends React.ElementType = typeof defaultElement
+>(
+  props: TypographyProps<C>
+) => React.ReactElement | null;
 
-      const localRef = createRef<HTMLSpanElement>();
+export const Typography: TypographyComponent = React.memo(
+  React.forwardRef(
+    <C extends React.ElementType = typeof defaultElement>(
+      { as, children, className, variant, ...props }: TypographyProps<C>,
+      forwardedRef?: PolymorphicRef<C>
+    ) => {
+      const Component = as || defaultElement;
+
+      const localRef = React.createRef<HTMLSpanElement>();
       const mergedRef = mergeRefs([localRef, forwardedRef]);
 
-      const classList = useMemo(() => {
+      const classList = React.useMemo(() => {
         switch (variant) {
-          case 'heading':
-            return clsx([
-              'font-syne',
-              'font-medium',
-              'text-4xl',
-              'md:text-6xl',
-              'lg:text-8xl',
-              className,
-            ]);
-          case 'sub-heading':
-            return clsx([
-              'font-inter',
-              'font-semibold',
-              'text-lg',
-              'lg:text-2xl',
-              className,
-            ]);
-          case 'section-heading':
+          case 'section-title':
             return clsx([
               'font-syne',
               'font-bold',
@@ -65,10 +49,10 @@ export const Typography = memo(
               'lg:text-8xl',
               'text-transparent',
               'bg-clip-text',
-              'bg-vibrant-october-silence',
+              'bg-headline',
               className,
             ]);
-          case 'section-subheading':
+          case 'section-subtitle':
             return clsx([
               'font-syne',
               'font-bold',
@@ -95,18 +79,122 @@ export const Typography = memo(
               'leading-relaxed',
               className,
             ]);
+          case 'button-default':
+            return clsx([
+              'relative',
+              'font-medium',
+              'font-mono',
+              'text-white',
+              // 'hover:text-primary-700',
+              'px-1',
+              'before:absolute',
+              'before:-bottom-0.5',
+              'before:left-0',
+              'before:h-px',
+              'before:w-full',
+              'before:origin-left',
+              'before:scale-x-0',
+              'before:bg-white',
+              'before:transition-all',
+              'before:duration-100',
+              'hover:before:scale-x-100',
+              'hover:no-underline',
+              className,
+            ]);
+          case 'button-primary':
+            return clsx([
+              'inline-flex',
+              'cursor-pointer',
+              'items-center',
+              'justify-center',
+              'rounded-xl',
+              'border-2',
+              'border-primary',
+              'bg-primary',
+              'px-4',
+              'py-2.5',
+              'text-lg',
+              'font-semibold',
+              'text-white',
+              'shadow-sm',
+              'hover:border-primary-accent',
+              'hover:bg-primary-accent',
+              'focus:outline-none',
+              'focus:ring-2',
+              'focus:ring-orange-400/80',
+              'focus:ring-offset-0',
+              'disabled:opacity-30',
+              'disabled:hover:border-primary',
+              'disabled:hover:bg-primary',
+              'disabled:hover:text-white',
+              'dark:focus:ring-white/80',
+              className,
+            ]);
+          case 'button-outlined':
+            return clsx([
+              'inline-flex',
+              'cursor-pointer',
+              'items-center',
+              'justify-center',
+              'rounded-xl',
+              'border-2',
+              'border-muted-1',
+              'bg-transparent',
+              'px-4',
+              'py-2.5',
+              'text-lg',
+              'font-semibold',
+              'text-text',
+              'shadow-sm',
+              'hover:text-white',
+              'focus:text-white',
+              'focus:outline-none',
+              'focus:ring-2',
+              'focus:ring-orange-400/80',
+              'focus:ring-offset-0',
+              'disabled:opacity-30',
+              'disabled:hover:text-text',
+              'dark:focus:ring-white/80',
+              className,
+            ]);
+          case 'button-ghost':
+            return clsx([
+              'inline-flex',
+              'cursor-pointer',
+              'items-center',
+              'justify-center',
+              'rounded-xl',
+              'border-2',
+              'border-transparent',
+              'bg-transparent',
+              'px-4',
+              'py-2.5',
+              'text-lg',
+              'font-semibold',
+              'text-text',
+              'hover:bg-heading/5',
+              'focus:bg-heading/5',
+              'focus:outline-none',
+              'focus:ring-2',
+              'focus:ring-heading/80',
+              'focus:ring-offset-0',
+              'disabled:opacity-30',
+              'disabled:hover:bg-transparent',
+              'disabled:hover:text-text',
+              className,
+            ]);
         }
       }, [variant, className]);
 
       return (
-        <Box
+        <Component
           as={as || 'span'}
           ref={mergedRef}
           className={classList}
-          {...boxProps}
+          {...props}
         >
           {children}
-        </Box>
+        </Component>
       );
     }
   )

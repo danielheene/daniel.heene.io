@@ -1,4 +1,5 @@
 import blockImage from './objects/object.image';
+import blockImages from './objects/object.images';
 import blockCode from './objects/object.code';
 import blockContent from './objects/block.content';
 import blogPost from './documents/blog.post';
@@ -31,6 +32,7 @@ export const schemaTypes = [
   /* blocks */
   blockCode,
   blockImage,
+  blockImages,
   blockContent,
 
   /* objects */

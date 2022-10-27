@@ -71,6 +71,7 @@ export const ContactModule = ({
               'hover:scale-125',
               'active:outline-0',
               'duration-100',
+              'rounded-lg',
               small ? ['text-2xl', 'p-1.5'] : ['text-3xl', 'p-1.5', 'sm:p-2.5'],
             ])}
           >

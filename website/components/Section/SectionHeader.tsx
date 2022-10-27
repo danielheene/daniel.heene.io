@@ -19,7 +19,7 @@ export const SectionHeader = (props: SectionHeaderProps): JSX.Element => {
         </Typography>
       )}
       {headline && (
-        <Typography as='h2' variant='section-heading'>
+        <Typography as='h2' variant='section-title'>
           {headline}
         </Typography>
       )}

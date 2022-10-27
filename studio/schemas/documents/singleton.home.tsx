@@ -59,6 +59,11 @@ export default defineType({
           title: 'Portrait',
           name: 'portrait',
           type: 'image',
+          options: {
+            hotspot: true,
+            storeOriginalFilename: true,
+            metadata: ['lqip', 'palette'],
+          },
         }),
       ],
     }),

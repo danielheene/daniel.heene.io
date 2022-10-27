@@ -14,6 +14,11 @@ export default defineType({
       title: 'Poster',
       name: 'poster',
       type: 'image',
+      options: {
+        hotspot: true,
+        storeOriginalFilename: true,
+        metadata: ['lqip', 'palette'],
+      },
     }),
     defineField({
       title: 'Body',

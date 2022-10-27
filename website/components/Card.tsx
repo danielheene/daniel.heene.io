@@ -59,14 +59,14 @@ export const Card = forwardRef(
 
     return tilted ? (
       <ReactParallaxTilt
-        perspective={1400}
+        perspective={800}
         transitionSpeed={600}
-        tiltMaxAngleX={10}
-        tiltMaxAngleY={10}
+        tiltMaxAngleX={15}
+        tiltMaxAngleY={15}
         tiltReverse
         glareEnable
         glarePosition='all'
-        glareMaxOpacity={0.1}
+        glareMaxOpacity={0.3}
         glareColor='#987DF7'
         className='rounded-lg overflow-hidden'
       >

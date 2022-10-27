@@ -21,12 +21,22 @@ export const Section = (props: SectionProps): JSX.Element => {
           'w-screen',
           'pt-32',
           'first-of-type:pt-0',
+          'scroll-m-4',
           'snap-start',
           'snap-both'
         )}
       >
         <div
-          className='section-spacer container'
+          className={clsx([
+            'section-spacer',
+            'container',
+            'max-w-screen',
+            'sm:max-w-screen-sm',
+            'md:max-w-screen-md',
+            'lg:max-w-screen-lg',
+            'xl:max-w-screen-xl',
+            '2xl:max-w-screen-2xl',
+          ])}
           aria-hidden={true}
           tabIndex={-1}
         />
@@ -43,7 +53,7 @@ export const Section = (props: SectionProps): JSX.Element => {
       </Box>
       <style jsx>
         {`
-          :global(.section + .section > .section-spacer::before) {
+          :global(.section > .section-spacer::before) {
             content: ' ';
             display: block;
             width: 100%;

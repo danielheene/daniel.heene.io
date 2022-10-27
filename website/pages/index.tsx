@@ -8,20 +8,20 @@ import { ServicesSection } from '@components/ServicesSection';
 import { DefaultLayout } from '@layouts/Default.layout';
 import Sanity, { appConfigQuery, homeQuery } from '@lib/sanity';
 import { HomeData, NextPageWithLayout } from '@lib/types';
-import { ProjectsSection } from '@components/ProjectsSection';
+import { ProjectTeaserSection } from '@components/ProjectTeaserSection';
 
 interface Props extends HomeData {}
 
 const HomePage: NextPageWithLayout = (props: Props) => {
-  const { heroStage, qualifications, customers, services } = props;
+  const { heroStage, qualifications, customers, services, projectTeaser } = props;
 
   return (
     <>
       {heroStage && <HeroStage {...heroStage} />}
       {services && <ServicesSection {...services} />}
+      {projectTeaser && <ProjectTeaserSection {...projectTeaser} />}
       {qualifications && <QualificationsSection {...qualifications} />}
       {customers && <CustomersSection {...customers} />}
-      <ProjectsSection />
     </>
   );
 };
@@ -35,7 +35,7 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   const appConfig = await SanityClient.fetch(appConfigQuery);
   const data = await SanityClient.fetch(homeQuery);
 
-  console.log(JSON.stringify(appConfig, null, 2));
+  console.log(JSON.stringify(data, null, 2));
 
   return {
     props: {

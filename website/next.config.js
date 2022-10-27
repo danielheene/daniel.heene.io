@@ -9,8 +9,6 @@ module.exports = withAxiom({
 
   images: {
     minimumCacheTTL: 60,
-    deviceSizes: [420, 540, 640, 750, 828, 1080, 1200, 1920, 2048],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     formats: ['image/avif', 'image/webp'],
     domains: [
       'cdn.sanity.io',
@@ -129,6 +127,7 @@ const ContentSecurityPolicy = `
   default-src 'self';
   script-src 'self' 'unsafe-eval' 'unsafe-inline' *.youtube.com *.twitter.com;
   child-src 'self' *.youtube.com *.google.com *.twitter.com;
+  worker-src 'self' blob:;
   style-src 'self' 'unsafe-inline' *.googleapis.com;
   img-src * blob: data:;
   media-src * blob: data:;

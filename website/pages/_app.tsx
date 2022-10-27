@@ -1,9 +1,9 @@
 import React from 'react';
 import { AnimatePresence, domAnimation, LazyMotion } from 'framer-motion';
-
-export { reportWebVitals } from 'next-axiom';
 import { get } from 'lodash-es';
+import { DefaultSeo } from 'next-seo';
 
+import SEO from '../seo.config';
 import { useAppStore } from '@lib/appStore';
 import { AppPropsWithLayout } from '@lib/types';
 import { isBrowser } from '@lib/utils';
@@ -17,14 +17,15 @@ import '../styles/globals.css';
 import '../styles/font-inter.css';
 import '../styles/font-jetbrains-mono.css';
 import '../styles/font-syne.css';
-import { DefaultSeo } from 'next-seo';
-import { MetaTag } from 'next-seo/lib/types';
 
+export { reportWebVitals } from 'next-axiom';
 export default function App({
   Component,
-  pageProps,
+  pageProps = {},
   router,
 }: AppPropsWithLayout): JSX.Element {
+  const { appConfig } = pageProps;
+  const { asPath } = router;
   const getLayout: (page: JSX.Element) => JSX.Element =
     Component.getLayout ?? ((page) => page);
   const {
@@ -33,14 +34,12 @@ export default function App({
     meta,
     setAppConfig,
     setRouteChanging,
-    setAnimateBackground,
+    setPreviousRoute,
   } = useAppStore();
 
   useIsomorphicLayoutEffect(() => {
-    if ('appConfig' in pageProps) {
-      setAppConfig(pageProps.appConfig);
-    }
-  }, [pageProps.appConfig]);
+    setAppConfig(appConfig);
+  }, [appConfig]);
 
   /**
    * add class for loading state to dom
@@ -55,25 +54,20 @@ export default function App({
   React.useEffect(() => {
     router.events.on('routeChangeStart', (_, { shallow }) => {
       if (shallow) return;
+      if (isBrowser) setTimeout(() => window.scrollTo(0, 0), 300);
 
-      if (isBrowser) {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth',
-        });
-      }
       setRouteChanging(true);
+      setPreviousRoute(asPath);
     });
 
     router.events.on('routeChangeComplete', (path: string) => {
       setTimeout(() => setRouteChanging(false), pageTransition.speed);
-      setAnimateBackground(path === '/');
     });
 
     router.events.on('routeChangeError', () => {
       setRouteChanging(false);
     });
-  }, [setRouteChanging]);
+  }, [setRouteChanging, asPath]);
 
   const { hireMeWidget, easterEggWidget } = features || {};
   const { titleTemplate, description, keywords, tags } = meta;
@@ -81,24 +75,13 @@ export default function App({
 
   return (
     <>
-      {/*<Head>*/}
-      {/*  <meta name='viewport' content='width=device-width, initial-scale=1' />*/}
-      {/*</Head>*/}
-      <DefaultSeo
-        titleTemplate={titleTemplate}
-        description={description}
-        additionalMetaTags={
-          tags.map(({ type, value, content }) => ({
-            [type]: value,
-            content,
-          })) as unknown as MetaTag[]
-        }
-      />
+      <DefaultSeo {...{ ...SEO, titleTemplate, description, keywords, tags }} />
 
       <LazyMotion features={domAnimation}>
         <AnimatePresence mode='wait'>
           <React.Fragment key={id}>
             {getLayout(<Component key={id} {...pageProps} />)}
+            {/*<Component key={id} {...pageProps} />*/}
           </React.Fragment>
         </AnimatePresence>
       </LazyMotion>

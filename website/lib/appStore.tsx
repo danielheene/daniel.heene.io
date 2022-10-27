@@ -8,12 +8,14 @@ export type AppStore = AppConfig & {
   showNavigation: boolean;
   animateBackground: boolean;
   headerHeight: number | null;
+  previousRoute: string;
   setRouteChanging: (changing: boolean) => void;
   setShowNavigation: (show: boolean) => void;
   setHeaderHeight: (height: number) => void;
   setAppConfig: (settings: Partial<AppConfig>) => void;
   setAnimateBackground: (animate: boolean) => void;
   setMetaData: (data: Partial<MetaDataConfig>) => void;
+  setPreviousRoute: (route: string) => void;
 };
 
 export const useAppStore = create<AppStore, [['zustand/immer', AppStore]]>(
@@ -28,11 +30,13 @@ export const useAppStore = create<AppStore, [['zustand/immer', AppStore]]>(
     mainNavigation: null,
     metaNavigation: null,
     meta: {
+      defaultTitle: null,
       titleTemplate: null,
       description: null,
       keywords: [],
       tags: [],
     },
+    previousRoute: null,
     setRouteChanging: (changing) => set(() => ({ isRouteChanging: changing })),
     setShowNavigation: (show) => set(() => ({ showNavigation: show })),
     setHeaderHeight: (height) => set(() => ({ headerHeight: height })),
@@ -42,5 +46,6 @@ export const useAppStore = create<AppStore, [['zustand/immer', AppStore]]>(
       set(() => ({ animateBackground: animate })),
     setMetaData: (data) =>
       set((state) => ({ meta: { ...state.meta, ...data } })),
+    setPreviousRoute: (route) => set(() => ({ previousRoute: route })),
   }))
 );

@@ -1,5 +1,7 @@
-import { Children, memo, ReactNode, useId, useMemo } from 'react';
+import { Children, memo, ReactNode, useId, useMemo, useState } from 'react';
 import { CSSRuleObject } from 'tailwindcss/types/config';
+import { useOnResizeCallback } from '@lib/hooks';
+import { get } from 'lodash-es';
 
 interface MarqueeProps {
   offset?: number;
@@ -11,6 +13,20 @@ interface MarqueeProps {
 export const Marquee = memo(
   ({ children, offset = 25, speed = 10, reverse = false }: MarqueeProps) => {
     const marqueeId = useId();
+    const [marqueeSpeed, setMarqueeSpeed] = useState<number>();
+
+    useOnResizeCallback((event: Event) => {
+      const width = get(
+        event,
+        'currentTarget.innerWidth',
+        get(event, 'target.innerWidth', null)
+      );
+      if (width >= 1200) setMarqueeSpeed(speed);
+      if (width >= 800 && width < 1200) setMarqueeSpeed(speed * 0.9);
+      if (width >= 540 && width < 800) setMarqueeSpeed(speed * 0.75);
+      if (width < 540) setMarqueeSpeed(0.5 * speed);
+    }, []);
+
     const adjustedChildren = useMemo(() => {
       const items = Array.from({ length: 4 }, (_, multiplier) =>
         Children.toArray(children).map((child, index) => {
@@ -34,7 +50,7 @@ export const Marquee = memo(
     const styles: CSSRuleObject = useMemo(
       () => ({
         ['--marquee-offset']: `${offset}%`,
-        ['--marquee-speed']: `${speed}s`,
+        ['--marquee-duration']: `${marqueeSpeed}s`,
         ['--marquee-initial']: `calc(-25% + var(--marquee-offset))`,
         ['--marquee-final']: `calc(-50% + var(--marquee-offset))`,
         ['--marquee-direction']: `${reverse ? 'reverse' : 'normal'}`,
@@ -71,8 +87,12 @@ export const Marquee = memo(
             display: flex;
             flex-direction: row;
             transform: translate3d(var(--marquee-initial), 0, 0);
-            animation: marquee var(--marquee-speed) linear infinite running;
             animation-direction: var(--marquee-direction);
+            animation-timing-function: linear;
+            animation-name: marquee;
+            animation-play-state: running;
+            animation-iteration-count: infinite;
+            animation-duration: var(--marquee-duration);
           }
 
           .marquee :global(.marquee-item) {

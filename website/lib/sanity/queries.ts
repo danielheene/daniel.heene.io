@@ -3,6 +3,7 @@ import {
   fileFragment,
   imageFragment,
   navMenuFragment,
+  projectTeaserFragment,
   urlPathFromSlugFragment,
 } from './fragments';
 
@@ -16,6 +17,13 @@ export const homeQuery = groq`
     services {
       ...
     },
+    projectTeaser {
+      header,
+      projectOne-> ${projectTeaserFragment},
+      projectTwo-> ${projectTeaserFragment},
+      projectThree-> ${projectTeaserFragment},
+      projectFour-> ${projectTeaserFragment}
+    },
     customers {
       ...,
       entries[published == true] {
@@ -26,15 +34,15 @@ export const homeQuery = groq`
   }
 `;
 
-export const projectListQuery = groq`
+export const pathsQuery = `
+  *[defined(slug) && !(_id in path("drafts.**"))] {
+    "urlPath": ${urlPathFromSlugFragment},
+  }
+`;
+
+export const projectUrlsQuery = groq`
  *[_type == "projects.project" && !(_id in path("drafts.**"))] {
-    _id,
-    _type,
-    _rev,
-    "path": ${urlPathFromSlugFragment},
-    title,
-    excerpt,
-    poster ${imageFragment},
+    "urlPath": ${urlPathFromSlugFragment},
  }
 `;
 
@@ -44,21 +52,40 @@ export const projectQuery = groq`
     _type,
     _rev,
     title,
-    "slug": "slug.current",
-    "path": ${urlPathFromSlugFragment},
+    "slug": slug.current,
+    "urlPath": ${urlPathFromSlugFragment},
     body[] {
       _key,
       _type,
-      _type == "image" => ${imageFragment},
-      _type != "image" => { ... },
+      _type == "object.image" => ${imageFragment},
+      _type != "object.image" => { ... },
     },
     excerpt,
     tags->{ ... },
-    category->{ _type, _id, name },
+    "category": category->name,
     metaDescription,
     metaKeywords,
     metaTags,
     poster ${imageFragment},
+  }
+`;
+
+export const pageQuery = groq`
+  *[_type == "singleton.**" && !(_id in path("drafts.**")) && slug.current == $slug][0] {
+    _id,
+    _type,
+    _rev,
+    title,
+    "urlPath": ${urlPathFromSlugFragment},
+    body[] {
+      _key,
+      _type,
+      _type == "object.image" => ${imageFragment},
+      _type != "object.image" => { ... },
+    },
+    metaDescription,
+    metaKeywords,
+    metaTags
   }
 `;
 

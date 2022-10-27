@@ -1,39 +1,111 @@
 import { Layout } from '@layouts/index';
+import { NextPageWithLayout } from '@lib/types';
+import { useRouter } from 'next/router';
+import { useAppStore } from '@lib/appStore';
+import clsx from 'clsx';
+import { Typography } from '@components/Typography';
+import { Image } from '@components/Image';
+import { Icon } from '@iconify/react';
+import { PortableText } from '@components/PortableText';
+import React, { ReactElement } from 'react';
+import { DefaultLayout } from '@layouts/Default.layout';
+import { GetStaticProps } from 'next';
+import Sanity, { appConfigQuery, pageQuery } from '@lib/sanity';
+import { TypedObject } from '@sanity/types';
 
-export default function ImprintPage() {
-  const sectionClasses = 'first-line:font-semibold text-white block m-2';
-  const titleClasses = sectionClasses + ' mb-4 text-2xl';
+const ImprintPage: NextPageWithLayout = (props, context) => {
+  const router = useRouter();
+  const { title, body } = props as {
+    title: string;
+    body: TypedObject | TypedObject[];
+  };
+  const { previousRoute } = useAppStore();
 
   return (
-    <Layout.Default seo={{ title: 'daniel.heene.io ─ imprint' }}>
-      <div className='flex flex-grow min-h-screen pt-16 pb-12'>
-        <div className='flex-grow flex flex-col justify-center max-w-md sm: max-w-2xl w-full mx-auto px-0 sm: px-12'>
-          <article className='relative flex flex-col space-x-3 bg-gray-900 bg-opacity-75 backdrop-filter backdrop-blur-sm px-2 py-3 border-2 border-gray-600 rounded-lg'>
-            <h1 className={titleClasses}>Imprint</h1>
-            <address className={sectionClasses}>
-              Daniel Heene
-              <br />
-              Von-Sparr-Str. 62
-              <br />
-              51063 Cologne
-              <br />
-              Germany
-            </address>
-            <div className={sectionClasses}>
-              Contact:
-              <br />
-              call: +49 221 22206571
-              <br />
-              mail: website@heene.io
-            </div>
-            <div className={sectionClasses}>
-              VAT ID:
-              <br />
-              DE348610586
-            </div>
-          </article>
+    <>
+      <article
+        className={clsx(['container', 'grid', 'grid-cols-12', 'gap-y-12'])}
+      >
+        <div className={clsx(['col-start-2', 'col-span-10'])}>
+          <Typography as='h1' variant='section-title' className='text-center'>
+            {title}
+          </Typography>
         </div>
-      </div>
-    </Layout.Default>
+
+        <nav
+          className={clsx([
+            'col-start-3',
+            'col-span-8',
+            'flex',
+            'flex-col',
+            'md:flex-row',
+            'justify-end',
+          ])}
+        >
+          <button
+            className={clsx([
+              'text-2xl',
+              'flex',
+              'flex-row',
+              'gap-1',
+              'font-mono',
+              'uppercase',
+              'items-center',
+              'font-semibold',
+              'mr-auto',
+            ])}
+            onClick={() => (previousRoute ? router.back() : router.push('/'))}
+          >
+            <Icon className={'text-3xl'} icon='mdi:arrow-left' />
+            Go Back
+          </button>
+          <div></div>
+        </nav>
+
+        {body && (
+          <div
+            className={clsx([
+              'col-start-3',
+              'col-span-8',
+              'rounded-lg',
+              'bg-white/10',
+              'backdrop-blur-2xl',
+              'p-12',
+            ])}
+          >
+            <PortableText value={body} />
+          </div>
+        )}
+      </article>
+    </>
   );
-}
+};
+
+ImprintPage.getLayout = (page: ReactElement) => (
+  <DefaultLayout>{page}</DefaultLayout>
+);
+
+export const getStaticProps: GetStaticProps<{
+  preview: boolean;
+}> = async ({ preview = false }) => {
+  try {
+    const SanityClient = Sanity.getClient(preview);
+    const appConfig = await SanityClient.fetch(appConfigQuery);
+    const data = await SanityClient.fetch(pageQuery, { slug: 'imprint' });
+
+    return {
+      props: {
+        ...data,
+        appConfig,
+      },
+      revalidate: 120,
+    };
+  } catch (error) {
+    return {
+      notFound: true,
+      props: null,
+    };
+  }
+};
+
+export default ImprintPage;

@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { Card } from '@components/Card';
 import { Section, SectionHeader } from '@components/Section';
 import { QualificationItemData, QualificationsSectionData } from '@lib/types';
+import { useIntersectionObserver } from '@lib/hooks';
 
 interface QualificationEntryProps extends QualificationItemData {
   index: number;
@@ -19,13 +20,25 @@ const QualificationEntry = ({
   body,
 }: QualificationEntryProps): JSX.Element => {
   const isOdd = !(index % 2);
-
-  const spacer = useMemo(() => <div className='w-full lg:w-1/2' />, []);
+  const [isInView, ref] = useIntersectionObserver({});
 
   return (
-    <>
-      {!isOdd && spacer}
-      <div className='w-full lg:w-1/2 px-4'>
+    <div className='grid grid-cols-2'>
+      <div
+        ref={ref}
+        className={clsx([
+          'col-span-full',
+          'lg:col-span-1',
+          isOdd ? 'lg:col-start-1' : 'lg:col-start-2',
+          'px-4',
+          'animate-in',
+          'fade-in',
+          'slide-in-from-bottom',
+          'fill-mode-forwards',
+          'duration-700',
+          isInView ? 'running' : 'paused',
+        ])}
+      >
         <div
           className={clsx(
             [
@@ -99,8 +112,7 @@ const QualificationEntry = ({
           </Card>
         </div>
       </div>
-      {isOdd && spacer}
-    </>
+    </div>
   );
 };
 
@@ -127,14 +139,12 @@ export const QualificationsSection = (
           'before:lg:left-1/2',
           'before:w-[1px]',
           'before:h-full',
-          'before:bg-[#d7dfff]'
+          'before:bg-[#D7DFFF80]'
         )}
       >
-        <div className='flex flex-wrap -mx-4'>
-          {entries.map((resume, index) => (
-            <QualificationEntry key={resume._key} index={index} {...resume} />
-          ))}
-        </div>
+        {entries.map((resume, index) => (
+          <QualificationEntry key={resume._key} index={index} {...resume} />
+        ))}
       </div>
     </Section>
   );

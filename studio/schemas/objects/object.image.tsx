@@ -8,7 +8,7 @@ export default defineType({
   options: {
     hotspot: true,
     storeOriginalFilename: true,
-    metadata: ['blurhash', 'palette'],
+    metadata: ['lqip', 'palette'],
   },
   fields: [
     defineField({

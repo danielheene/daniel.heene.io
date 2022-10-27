@@ -73,7 +73,7 @@ export const GradientBackground = ({
             style={{
               opacity: ready ? 1 : 0,
               background: 'url(/noise.svg) center center',
-              filter: 'contrast(200%) brightness(-800%)',
+              filter: 'contrast(200%) brightness(0%)',
             }}
             className={clsx(
               'w-[200%]',

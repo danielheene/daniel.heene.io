@@ -35,6 +35,7 @@ export const HeroStage = ({
       <div
         style={{
           ['--header-height' as any]: `${headerHeight}px`,
+          ['--stage-height' as any]: `calc(100vh - 2 * var(--header-height))`,
         }}
         className={clsx([
           'relative',
@@ -44,9 +45,10 @@ export const HeroStage = ({
           'lg:flex-row',
           'justify-center',
           'items-start',
-          'py-[var(--header-height)]',
           'lg:items-center',
-          'lg:min-h-screen',
+          // 'lg:min-h-screen',
+          'lg:min-h-[var(--stage-height)]',
+          'mb-[var(--header-height)]',
           'gap-16',
           className,
         ])}
@@ -120,7 +122,7 @@ export const HeroStage = ({
             {subHeadline.map(
               (line, index) =>
                 index === subHeadlineIndex && (
-                  <motion.button
+                  <motion.div
                     key={index}
                     initial={{ translateY: '-200%', opacity: 0 }}
                     animate={{ translateY: '0%', opacity: 1 }}
@@ -130,7 +132,6 @@ export const HeroStage = ({
                     className={clsx([
                       'font-syne',
                       'font-bold',
-                      'font-[size:110%]',
                       'text-3xl',
                       'sm:text-4xl',
                       'lg:text-5xl',
@@ -139,15 +140,21 @@ export const HeroStage = ({
                       'bg-vibrant-october-silence',
                       'select-none',
                       'cursor-pointer',
-                      'h-[2.5em]',
+                      'text-center',
+                      'flex',
+                      'flex-col',
+                      'items-center',
+                      'justify-center',
+                      'self-center',
+                      'h-[3em]',
                       'py-4',
                       'mt-2',
                       'relative',
                       'z-0',
                     ])}
                   >
-                    {line}
-                  </motion.button>
+                    <span>{line}</span>
+                  </motion.div>
                 )
             )}
           </AnimatePresence>

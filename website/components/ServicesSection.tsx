@@ -31,7 +31,7 @@ const ServiceItem = ({
       <div className='rounded-full m-auto text-6xl'>
         {icon && <Icon icon={icon} />}
       </div>
-      <Typography variant='section-subheading' className='mt-8'>
+      <Typography variant='section-subtitle' className='mt-8'>
         {name}
       </Typography>
       <Typography variant='body' className='mt-12 line-clamp-5'>
@@ -44,7 +44,8 @@ const ServiceItem = ({
 export const ServicesSection = (props: ServicesSectionData): JSX.Element => {
   const { header, entries } = props;
   const [ref] = useEmblaCarousel({
-    slidesToScroll: 1,
+    slidesToScroll: 3,
+    startIndex: entries.length > 1 ? 1 : 0,
     loop: true,
     align: 'center',
     skipSnaps: false,
