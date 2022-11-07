@@ -1,8 +1,7 @@
-import React, { forwardRef, Ref, useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { Button, Grid, Stack } from '@sanity/ui';
 import { Icon } from '@iconify/react';
-import { StringInputProps } from 'sanity/_unstable';
-import { set, unset } from 'sanity/form';
+import { set, unset, StringInputProps } from 'sanity';
 
 type Position = 'left' | 'center' | 'right';
 

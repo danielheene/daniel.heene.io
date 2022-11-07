@@ -83,11 +83,5 @@ export const Logo = ({
     []
   );
 
-  return asLink ? (
-    <Link href='/'>
-      <a>{logo}</a>
-    </Link>
-  ) : (
-    logo
-  );
+  return asLink ? <Link href='/'>{logo}</Link> : logo;
 };

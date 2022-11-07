@@ -1,7 +1,7 @@
 import React, { PropsWithoutRef } from 'react';
 import { Badge, Flex } from '@sanity/ui';
 import { get } from 'lodash';
-import { SanityDefaultPreview } from 'sanity/_unstable';
+import { SanityDefaultPreview } from 'sanity';
 
 export const SanityPreviewWithPublishedLabel = (
   props: PropsWithoutRef<Record<string, unknown>>

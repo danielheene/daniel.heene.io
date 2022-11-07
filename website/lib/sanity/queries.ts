@@ -1,48 +1,26 @@
 import { groq } from 'next-sanity';
 import {
   fileFragment,
+  homeDataFragment,
   imageFragment,
   navMenuFragment,
-  projectTeaserFragment,
-  urlPathFromSlugFragment,
+  urlPathFragment,
 } from './fragments';
+import { getClient } from '@lib/sanity/client';
 
-export const homeQuery = groq`
- *[_type == "singleton.home"][0] {
-    ...,
-    heroStage {
-      ...,
-      portrait ${imageFragment},
-    },
-    services {
-      ...
-    },
-    projectTeaser {
-      header,
-      projectOne-> ${projectTeaserFragment},
-      projectTwo-> ${projectTeaserFragment},
-      projectThree-> ${projectTeaserFragment},
-      projectFour-> ${projectTeaserFragment}
-    },
-    customers {
-      ...,
-      entries[published == true] {
-        ...,
-        image ${imageFragment},
-      }
-    }
-  }
-`;
+export const fetchHomeData = async (isPreview = false) => {
+  const client = getClient(isPreview);
 
-export const pathsQuery = `
-  *[defined(slug) && !(_id in path("drafts.**"))] {
-    "urlPath": ${urlPathFromSlugFragment},
-  }
-`;
+  const query = isPreview
+    ? groq`*[_id in ["singleton.home", "drafts.singleton.home"]] | order(_updatedAt desc)[0] ${homeDataFragment}`
+    : groq`*[_id == "singleton.home" && !(_id in path("drafts.**"))][0] ${homeDataFragment}`;
+
+  return await client.fetch(query);
+};
 
 export const projectUrlsQuery = groq`
  *[_type == "projects.project" && !(_id in path("drafts.**"))] {
-    "urlPath": ${urlPathFromSlugFragment},
+    "urlPath": ${urlPathFragment},
  }
 `;
 
@@ -53,7 +31,7 @@ export const projectQuery = groq`
     _rev,
     title,
     "slug": slug.current,
-    "urlPath": ${urlPathFromSlugFragment},
+    "urlPath": ${urlPathFragment},
     body[] {
       _key,
       _type,
@@ -77,7 +55,7 @@ export const imprintQuery = groq`
     _type,
     _rev,
     title,
-    "urlPath": ${urlPathFromSlugFragment},
+    "urlPath": ${urlPathFragment},
     body[] {
       _key,
       _type,
@@ -102,7 +80,10 @@ export const footerNavigationQuery = groq`
   *[_type == "settings.navigation" && defined(footer) && !(_id in path("drafts.**"))][0]{...footer} ${navMenuFragment}
 `;
 
-export const appConfigQuery = groq`
+export const fetchAppConfig = async (isPreview = false) => {
+  const client = getClient(isPreview);
+
+  return await client.fetch(groq`
   {
     ...*[_type == "settings.main" && !(_id match "drafts.*")][0] {
       contact,
@@ -122,4 +103,7 @@ export const appConfigQuery = groq`
     "metaNavigation": ${metaNavigationQuery},
     "footerNavigation": ${footerNavigationQuery},
   }
-`;
+`);
+};
+
+export const pathFromIdQuery = groq`*[_id == $id][0]{"urlPath": ${urlPathFragment}}.urlPath`;

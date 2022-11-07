@@ -20,126 +20,126 @@ export const ProjectItem = memo(
     excerpt,
     className,
   }: ProjectItemProps): JSX.Element => {
+    const MotionLink = motion(Link);
     return (
-      <Link href={urlPath}>
-        <motion.a
-          variants={staggerTransition.item}
+      <MotionLink
+        href={urlPath}
+        variants={staggerTransition.item}
+        className={clsx([
+          'relative',
+          'overflow-hidden',
+          'group',
+          'cursor-pointer',
+          'rounded-lg',
+          className,
+        ])}
+      >
+        <Image
+          image={poster}
           className={clsx([
-            'relative',
-            'overflow-hidden',
-            'group',
-            'cursor-pointer',
+            'transition-all',
+            'duration-500',
+            'group-hover:scale-105',
             'rounded-lg',
-            className,
           ])}
-        >
-          <Image
-            image={poster}
+        />
+        <div>
+          <header
             className={clsx([
-              'transition-all',
-              'duration-500',
-              'group-hover:scale-105',
+              'absolute',
+              'left-0',
+              'top-0',
+              'right-0',
+              'gap-2',
+              'p-4',
+              'md:p-8',
               'rounded-lg',
+              'bg-gradient-to-b',
+              'from-black/30',
+              'to-transparent',
+              'drop-shadow-card-header',
             ])}
-          />
-          <div>
-            <header
+          >
+            <p
               className={clsx([
-                'absolute',
-                'left-0',
-                'top-0',
-                'right-0',
-                'gap-2',
-                'p-4',
-                'md:p-8',
-                'rounded-lg',
-                'bg-gradient-to-b',
-                'from-black/30',
-                'to-transparent',
-                'drop-shadow-card-header',
+                'block',
+                'h-5',
+                'font-extrabold',
+                'font-jetbrains-mono',
+                'text-sm',
+                'text-orange-400',
+                'uppercase',
+                'tracking-tight',
               ])}
             >
-              <p
-                className={clsx([
-                  'block',
-                  'h-5',
-                  'font-extrabold',
-                  'font-jetbrains-mono',
-                  'text-sm',
-                  'text-orange-400',
-                  'uppercase',
-                  'tracking-tight',
-                ])}
-              >
-                {category}
-              </p>
-              <p
-                className={clsx([
-                  'text-2xl',
-                  'md:text-3xl',
-                  'font-bold',
-                  'text-white',
-                  'font-inter',
-                ])}
-              >
-                {title}
-              </p>
-            </header>
+              {category}
+            </p>
+            <p
+              className={clsx([
+                'text-2xl',
+                'md:text-3xl',
+                'font-bold',
+                'text-white',
+                'font-inter',
+              ])}
+            >
+              {title}
+            </p>
+          </header>
 
-            {excerpt !== null && `${excerpt}`.trim() !== '' && (
+          {excerpt !== null && `${excerpt}`.trim() !== '' && (
+            <div
+              className={clsx([
+                'absolute',
+                'p-12',
+                'md:p-20',
+                'pt-24',
+                '-left-12',
+                '-right-12',
+                '-bottom-12',
+                'bg-gradient-to-b',
+                'from-transparent',
+                'via-zinc-900/70',
+                'to-zinc-900/95',
+                'opacity-0',
+                'transition-all',
+                'group-hover:opacity-100',
+                'duration-500',
+                'scale-90',
+                'group-hover:scale-100',
+                'origin-bottom',
+                'rounded-lg',
+              ])}
+            >
               <div
                 className={clsx([
-                  'absolute',
-                  'p-12',
-                  'md:p-20',
-                  'pt-24',
-                  '-left-12',
-                  '-right-12',
-                  '-bottom-12',
-                  'bg-gradient-to-b',
-                  'from-transparent',
-                  'via-zinc-900/70',
-                  'to-zinc-900/95',
+                  'translate-y-8',
+                  'transform',
                   'opacity-0',
                   'transition-all',
+                  'group-hover:translate-y-0',
                   'group-hover:opacity-100',
-                  'duration-500',
-                  'scale-90',
-                  'group-hover:scale-100',
-                  'origin-bottom',
-                  'rounded-lg',
                 ])}
               >
-                <div
+                <p
                   className={clsx([
-                    'translate-y-8',
-                    'transform',
-                    'opacity-0',
-                    'transition-all',
-                    'group-hover:translate-y-0',
-                    'group-hover:opacity-100',
+                    'text-sm',
+                    'md:text-xl',
+                    'font-medium',
+                    'text-white',
+                    'tracking-tighter',
+                    'break-words',
+                    'hyphens',
+                    'line-clamp-2',
                   ])}
                 >
-                  <p
-                    className={clsx([
-                      'text-sm',
-                      'md:text-xl',
-                      'font-medium',
-                      'text-white',
-                      'tracking-tighter',
-                      'break-words',
-                      'hyphens',
-                      'line-clamp-2',
-                    ])}
-                  >
-                    {excerpt}
-                  </p>
-                </div>
+                  {excerpt}
+                </p>
               </div>
-            )}
-          </div>
-        </motion.a>
-      </Link>
+            </div>
+          )}
+        </div>
+      </MotionLink>
     );
   }
 );

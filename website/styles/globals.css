@@ -18,11 +18,11 @@
   }
 
   #__next {
-    @apply flex flex-col min-h-screen w-screen opacity-100 transition-opacity duration-300;
+    @apply flex flex-col min-h-screen w-screen opacity-100 transition-opacity duration-75;
   }
 
   .is-loading #__next {
-    @apply opacity-0 overflow-hidden cursor-wait;
+    @apply opacity-0 overflow-hidden cursor-wait duration-300;
   }
 
   ::selection {

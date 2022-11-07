@@ -1,12 +1,14 @@
-import React from 'react';
-import { useRouter } from 'next/router';
 import { Icon } from '@iconify/react';
-import clsx from 'clsx';
-
 import { isBrowser } from '@lib/utils';
-import { log } from 'next-axiom';
+import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import React from 'react';
 
-export default function PreviewBanner() {
+export const PreviewBanner = ({
+  preview,
+}: {
+  preview: boolean;
+}): JSX.Element | null => {
   const [hover, setHover] = React.useState<boolean>(false);
   const router = useRouter();
 
@@ -16,36 +18,32 @@ export default function PreviewBanner() {
         .then(({ ok }) => {
           if (ok) router.reload();
         })
-        .catch(log.error);
+        .catch(console.log);
     }
   }, [router]);
 
-  return (
+  return preview ? (
     <div
-      className={clsx([
-        'relative',
-        'left-0',
-        'right-0',
+      className={clsx(
+        'fixed',
+        'left-1/2',
         'top-0',
-        'flex',
-        'justify-center',
-        'items-center',
-        'bg-red-700',
-        'h-8',
-        'w-screen',
-        'z-50',
-      ])}
+        '-translate-x-1/2',
+        'z-max',
+        'bg-black',
+        'px-2.5',
+        'rounded-b-xl'
+      )}
     >
       <button
         className={clsx([
           'relative',
-          'inline-flex',
-          'flex-row',
-          'items-center',
+          'flex',
           'justify-center',
-          'gap-x-2',
-          'px-8',
+          'items-center',
           'h-8',
+          'px-8',
+
           'text-white',
           'text-lg',
           'font-mono',
@@ -57,20 +55,21 @@ export default function PreviewBanner() {
         onMouseLeave={() => setHover(false)}
       >
         <span className='leading-[0px]'>PREVIEW MODE</span>
-        {hover && (
-          <Icon
-            icon='ant-design:close-outlined'
-            className={clsx([
-              'absolute',
-              'right-0',
-              'top-1/2',
-              '-translate-y-1/2',
-              'text-[150%]',
-              'animate-fade',
-            ])}
-          />
-        )}
+        <Icon
+          icon='mdi:close'
+          className={clsx(
+            'absolute',
+            'right-0',
+            'top-1/2',
+            '-translate-y-1/2',
+            'text-[150%]',
+            'duration-100',
+            hover
+              ? ['opacity-100', 'pointer-events-auto']
+              : ['opacity-0', 'pointer-events-none']
+          )}
+        />
       </button>
     </div>
-  );
-}
+  ) : null;
+};

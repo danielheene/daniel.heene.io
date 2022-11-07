@@ -31,19 +31,23 @@ export const imageFragment = `
   }
 `;
 
-export const urlPathFromSlugFragment = `
+export const urlPathFragment = `
   select(
-    string::startsWith(_type, "singleton") => "/",
-    string::startsWith(_type, "projects") => "/projects/",
-    string::startsWith(_type, "blog") => "/blog/",
-  ) + slug.current
+    _type match   "singleton.*"   => "/",
+    _type match   "projects.*"    => "/projects/",
+    _type match   "blog.*"        => "/blog/",
+  ) + select(
+    slug.current match  "home"    => "",
+    slug.current
+  )
 `;
+
 
 export const projectTeaserFragment = `
   {
     title,
     excerpt,
-    "urlPath": ${urlPathFromSlugFragment},
+    "urlPath": ${urlPathFragment},
     poster ${imageFragment},
     ...category->{ "category": name },
   }
@@ -63,7 +67,7 @@ export const navItemFragment = `
     },
     variant == 'internal' => {
       ...ref-> {
-        "url": ${urlPathFromSlugFragment},
+        "url": ${urlPathFragment},
       }
     },
     variant == 'file' => {
@@ -80,3 +84,31 @@ export const navMenuFragment = `
     entries[] ${navItemFragment}
   }
 `;
+
+
+export const homeDataFragment = `
+  {
+    ...,
+    heroStage {
+      ...,
+      portrait ${imageFragment},
+    },
+    services {
+      ...
+    },
+    projectTeaser {
+      header,
+      projectOne-> ${projectTeaserFragment},
+      projectTwo-> ${projectTeaserFragment},
+      projectThree-> ${projectTeaserFragment},
+      projectFour-> ${projectTeaserFragment}
+    },
+    customers {
+      ...,
+      entries[published == true] {
+        ...,
+        image ${imageFragment},
+      }
+    }
+  }
+`

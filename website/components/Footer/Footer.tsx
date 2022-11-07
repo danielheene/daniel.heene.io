@@ -4,10 +4,16 @@ import clsx from 'clsx';
 import { Typography } from '@components/Typography';
 import { Icon } from '@iconify/react';
 import React from 'react';
-import { useAppStore } from '@lib/appStore';
+import { AppConfigData } from '@lib/types';
+import Link from 'next/link';
 
-export const Footer = () => {
-  const { metaNavigation, contact, assets } = useAppStore();
+interface FooterProps {
+  metaNavigation?: AppConfigData['metaNavigation'];
+  contact?: AppConfigData['contact'];
+  assets?: AppConfigData['assets'];
+}
+
+export const Footer = ({ metaNavigation, contact, assets }: FooterProps) => {
   return (
     <footer
       className={clsx([
@@ -45,30 +51,36 @@ export const Footer = () => {
             ])}
           >
             {assets?.resume && (
-              <Typography
-                as='a'
-                variant='button-primary'
+              <Link
                 href={assets?.resume?.url}
+                download={assets?.resume?.originalFilename}
                 target='_blank'
                 rel='noopener noreferrer'
-                download={assets?.resume?.originalFilename}
               >
-                Resume
-                <Icon icon='mdi:tray-arrow-down' className='ml-2 text-[120%]' />
-              </Typography>
+                <Typography variant='button-primary'>
+                  Resume
+                  <Icon
+                    icon='mdi:tray-arrow-down'
+                    className='ml-2 text-[120%]'
+                  />
+                </Typography>
+              </Link>
             )}
-            {assets?.resume && (
-              <Typography
-                as='a'
-                variant='button-primary'
-                href={assets?.resume?.url}
+            {assets?.publicKey && (
+              <Link
+                href={assets?.publicKey?.url}
+                download={assets?.publicKey?.originalFilename}
                 target='_blank'
                 rel='noopener noreferrer'
-                download={assets?.resume?.originalFilename}
               >
-                Resume
-                <Icon icon='mdi:tray-arrow-down' className='ml-2 text-[120%]' />
-              </Typography>
+                <Typography variant='button-primary'>
+                  Public Key
+                  <Icon
+                    icon='mdi:tray-arrow-down'
+                    className='ml-2 text-[120%]'
+                  />
+                </Typography>
+              </Link>
             )}
           </nav>
 

@@ -145,6 +145,7 @@ export default defineType({
       group: 'customers',
     }),
     defineField({ ...FieldConfig.Title, group: 'meta' }),
+    defineField({ ...FieldConfig.SlugInput, group: 'meta' }),
     defineField({ ...FieldConfig.MetaDescription, group: 'meta' }),
     defineField({ ...FieldConfig.MetaKeywords, group: 'meta' }),
     defineField({ ...FieldConfig.MetaTags, group: 'meta' }),

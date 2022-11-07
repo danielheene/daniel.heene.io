@@ -8,8 +8,7 @@ import React, {
 import { Icon } from '@iconify/react';
 import { Box, Code, Grid, Stack, TextInput } from '@sanity/ui';
 import { defaults, isEqual } from 'lodash';
-import { ObjectSchemaTypeWithOptions } from 'sanity';
-import { set, unset } from 'sanity/form';
+import { set, unset, ObjectSchemaTypeWithOptions } from 'sanity';
 import styled from 'styled-components';
 
 type ContactProvider =

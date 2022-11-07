@@ -2,16 +2,15 @@ import React from 'react';
 import { Icon } from '@iconify/react';
 import { codeInput } from '@sanity/code-input';
 import { visionTool } from '@sanity/vision';
-import { createConfig } from 'sanity';
+import { defineConfig } from 'sanity';
 import { deskTool } from 'sanity/desk';
-import { unsplashImageAsset } from 'sanity-plugin-asset-source-unsplash';
 import { markdownSchema } from 'sanity-plugin-markdown';
 
 import { schemaTypes } from './schemas';
 
 import './overrides.css';
 
-export default createConfig({
+export default defineConfig({
   name: 'default',
   title: 'daniel.heene.io',
 
@@ -26,23 +25,18 @@ export default createConfig({
 
   document: {
     productionUrl: async (prev, context) => {
-      const { client, dataset, document } = context;
+      const { document } = context;
+      if (document._type.startsWith('settings')) return '';
 
-      if (document._type === 'post') {
-        // you can now use async/await 🎉
-        const slug = await client.fetch(
-          `*[_type == 'routeInfo' && post._ref == $postId][0].slug.current`,
-          { postId: document._id }
-        );
+      const params = new URLSearchParams();
+      params.append('id', document._id);
+      params.append('secret', import.meta.env.SANITY_STUDIO_PREVIEW_TOKEN);
 
-        const params = new URLSearchParams();
-        params.set('preview', 'true');
-        params.set('dataset', dataset);
-
-        return `${import.meta.env.SITE_URL}/posts/${slug}?${params}`;
-      }
-
-      return prev;
+      return [
+        import.meta.env.SANITY_STUDIO_SITE_URL,
+        '/api/preview?',
+        params.toString(),
+      ].join('');
     },
   },
 
@@ -288,7 +282,6 @@ export default createConfig({
             ),
           ]),
     }),
-    unsplashImageAsset(),
     markdownSchema(),
     codeInput(),
     visionTool(),

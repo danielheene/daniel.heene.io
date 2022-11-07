@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo } from 'react';
 import { AnimatePresence, domAnimation, LazyMotion } from 'framer-motion';
-import { get } from 'lodash-es';
+import { get, isObject } from 'lodash-es';
 import { DefaultSeo, NextSeo } from 'next-seo';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -23,6 +23,7 @@ import { Footer } from '@components/Footer/Footer';
 import { AppProps } from 'next/app';
 import { MetaDataResponse } from '@lib/types';
 import { MetaTag } from 'next-seo/lib/types';
+import { PreviewBanner } from '@components/PreviewBanner';
 
 export { reportWebVitals } from 'next-axiom';
 
@@ -31,29 +32,23 @@ export default function App({
   pageProps = {},
   router,
 }: AppProps): JSX.Element {
-  const { appConfig, ...componentProps } = pageProps;
+  const { appConfig, preview, ...componentProps } = pageProps;
   const { asPath } = router;
 
-  const {
-    features,
-    isRouteChanging,
-    contact,
-    metaNavigation,
-    footerNavigation,
-    setAppConfig,
-    setRouteChanging,
-    setPreviousRoute,
-  } = useAppStore();
+  const { features, setAppConfig, setRouteChanging, setPreviousRoute } =
+    useAppStore();
 
   useIsomorphicLayoutEffect(() => {
     // TODO: move metadata to own object in sanity
-    const nextConfig = Object.fromEntries(
-      Object.entries(appConfig).filter(
-        ([key]) =>
-          !['title', 'defaultTitle', 'titleTemplate'].includes(key) &&
-          !key.startsWith('meta')
-      )
-    );
+    const nextConfig = isObject(appConfig)
+      ? Object.fromEntries(
+          Object.entries(appConfig).filter(
+            ([key]) =>
+              !['title', 'defaultTitle', 'titleTemplate'].includes(key) &&
+              !key.startsWith('meta')
+          )
+        )
+      : {};
 
     setAppConfig(nextConfig);
   }, [appConfig]);
@@ -134,47 +129,54 @@ export default function App({
   }, [pageProps, appConfig]);
 
   /**
-   * add class for loading state to dom
-   */
-  React.useEffect(() => {
-    document.documentElement.classList.toggle('is-loading', isRouteChanging);
-  }, [isRouteChanging]);
-
-  /**
    * bind router events
    */
   React.useEffect(() => {
     router.events.on('routeChangeStart', (_, { shallow }) => {
       if (shallow) return;
-      if (isBrowser) setTimeout(() => window.scrollTo(0, 0), 300);
+      if (isBrowser) {
+        document.documentElement.classList.add('is-loading');
+      }
 
       setRouteChanging(true);
       setPreviousRoute(asPath);
     });
 
     router.events.on('routeChangeComplete', () => {
+      if (isBrowser) {
+        document.documentElement.classList.remove('is-loading');
+      }
       setTimeout(() => setRouteChanging(false), pageTransition.speed);
     });
 
     router.events.on('routeChangeError', () => {
+      if (isBrowser) {
+        document.documentElement.classList.remove('is-loading');
+      }
       setRouteChanging(false);
     });
   }, [setRouteChanging, asPath]);
 
   const { hireMeWidget, easterEggWidget } = features || {};
+  const { metaNavigation, contact, assets } = appConfig || {};
   const id = get(router, 'asPath', 'home');
 
   return (
     <TooltipProvider delayDuration={0}>
       <DefaultSeo {...{ ...SEO }} />
       <NextSeo {...metaConfig} />
+      <PreviewBanner preview={preview} />
 
       <LazyMotion features={domAnimation}>
         <AnimatePresence mode='wait'>
           <Fragment key={id}>
             <Header />
             <Component key={id} {...componentProps} />
-            <Footer />
+            <Footer
+              metaNavigation={metaNavigation}
+              contact={contact}
+              assets={assets}
+            />
           </Fragment>
         </AnimatePresence>
       </LazyMotion>

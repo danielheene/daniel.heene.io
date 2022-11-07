@@ -13,48 +13,43 @@ export const NavigationItem = memo(
       case 'internal': {
         const { _key, url, label } = props;
         return (
-          <Link key={_key} href={url} passHref>
-            <Typography as='a' variant={`button-${mode}`}>
-              {label}
-            </Typography>
+          <Link key={_key} href={url}>
+            <Typography variant={`button-${mode}`}>{label}</Typography>
           </Link>
         );
       }
       case 'external': {
-        const { _key, url, label, blank, forceDownload } = props;
+        const { url, label, blank, forceDownload } = props;
         return (
-          <Typography
-            as='a'
-            variant={`button-${mode}`}
-            key={_key}
+          <Link
             href={url}
             target={blank ? '_blank' : undefined}
             rel={blank ? 'noopener noreferrer' : undefined}
             download={forceDownload}
           >
-            {label}
-            {forceDownload && (
-              <Icon icon='mdi:tray-arrow-down' className='ml-2 text-[120%]' />
-            )}
-          </Typography>
+            <Typography variant={`button-${mode}`}>
+              {label}
+              {forceDownload && (
+                <Icon icon='mdi:tray-arrow-down' className='ml-2 text-[120%]' />
+              )}
+            </Typography>
+          </Link>
         );
       }
       case 'file': {
-        const { _key, url, label, blank, originalFilename, forceDownload } =
-          props;
+        const { url, label, blank, originalFilename, forceDownload } = props;
         return (
-          <Link key={_key} href={url} passHref>
-            <Typography
-              as='a'
-              variant={`button-${mode}`}
-              download={
-                !!originalFilename && !!forceDownload
-                  ? originalFilename
-                  : !!forceDownload
-              }
-              target={blank ? '_blank' : undefined}
-              rel={blank ? 'noopener noreferrer' : undefined}
-            >
+          <Link
+            href={url}
+            download={
+              !!originalFilename && !!forceDownload
+                ? originalFilename
+                : !!forceDownload
+            }
+            target={blank ? '_blank' : undefined}
+            rel={blank ? 'noopener noreferrer' : undefined}
+          >
+            <Typography variant={`button-${mode}`}>
               {label}
               {forceDownload && (
                 <Icon icon='mdi:tray-arrow-down' className='ml-2 text-[120%]' />

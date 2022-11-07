@@ -5,7 +5,7 @@ import { HeroStage } from '@components/HeroStage';
 import { CustomersSection } from '@components/CustomersSection';
 import { QualificationsSection } from '@components/QualificationsSection';
 import { ServicesSection } from '@components/ServicesSection';
-import Sanity, { appConfigQuery, homeQuery } from '@lib/sanity';
+import Sanity, { fetchAppConfig, fetchHomeData } from '@lib/sanity';
 import { HomeData } from '@lib/types';
 import { ProjectTeaserSection } from '@components/ProjectTeaserSection';
 
@@ -28,9 +28,8 @@ const HomePage: NextPage = (props: Props) => {
 
 export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   try {
-    const SanityClient = Sanity.getClient(preview);
-    const appConfig = await SanityClient.fetch(appConfigQuery);
-    const data = await SanityClient.fetch(homeQuery);
+    const appConfig = await fetchAppConfig(preview);
+    const data = await fetchHomeData(preview);
 
     return {
       props: {

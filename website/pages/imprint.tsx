@@ -6,7 +6,7 @@ import { Icon } from '@iconify/react';
 import { PortableText } from '@components/PortableText';
 import React from 'react';
 import { GetStaticProps, NextPage } from 'next';
-import Sanity, { appConfigQuery, imprintQuery } from '@lib/sanity';
+import Sanity, {  fetchAppConfig, imprintQuery } from '@lib/sanity';
 import { TypedObject } from '@sanity/types';
 
 const ImprintPage: NextPage = (props) => {
@@ -81,13 +81,14 @@ export const getStaticProps: GetStaticProps<{
 }> = async ({ preview = false }) => {
   try {
     const SanityClient = Sanity.getClient(preview);
-    const appConfig = await SanityClient.fetch(appConfigQuery);
+    const appConfig = await fetchAppConfig(preview);
     const data = await SanityClient.fetch(imprintQuery);
 
     return {
       props: {
         ...data,
         appConfig,
+        preview,
       },
       revalidate: 60,
     };

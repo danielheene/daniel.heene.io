@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react';
-import NextImage, { ImageProps as NextImageProps } from 'next/future/image';
+import NextImage, { ImageProps as NextImageProps } from 'next/image';
 import clsx from 'clsx';
 import { ImageAssetFragment } from '@lib/types';
 

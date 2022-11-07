@@ -4,7 +4,7 @@ import clsx, { ClassValue } from 'clsx';
 
 interface NavigationProps {
   className?: ClassValue;
-  items?: {}
+  items?: {};
 }
 
 export const HeaderNavigation = ({
@@ -45,8 +45,8 @@ export const HeaderNavigation = ({
   return (
     <nav className={containerClasses}>
       {mainNavigationItems.map(({ href, title }) => (
-        <Link key={href} href={href}>
-          <a className={linkClasses}>{title}</a>
+        <Link key={href} href={href} className={linkClasses}>
+          {title}
         </Link>
       ))}
     </nav>

@@ -4,9 +4,9 @@ import { ProjectProjectData } from '@lib/types';
 import { PortableText } from '@components/PortableText';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Sanity, {
-  appConfigQuery,
   projectUrlsQuery,
   projectQuery,
+  fetchAppConfig,
 } from '@lib/sanity';
 import { Image } from '@components/Image';
 import { Typography } from '@components/Typography';
@@ -15,7 +15,6 @@ import { useAppStore } from '@lib/appStore';
 import { useRouter } from 'next/router';
 import { Icon } from '@iconify/react';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import { NextSeo } from 'next-seo';
 
 interface Props extends ProjectProjectData {}
 
@@ -176,13 +175,14 @@ export const getStaticProps: GetStaticProps<{
   try {
     const { slug } = params;
     const SanityClient = Sanity.getClient(preview);
-    const appConfig = await SanityClient.fetch(appConfigQuery);
+    const appConfig = await fetchAppConfig(preview);
     const data = await SanityClient.fetch(projectQuery, { slug });
 
     return {
       props: {
         ...data,
         appConfig,
+        preview,
       },
       revalidate: 60,
     };

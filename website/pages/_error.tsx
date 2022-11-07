@@ -22,8 +22,8 @@ export default function Error() {
           The page you're looking for couldn't be found.
         </p>
         <div className='mt-6 flex justify-center items-center space-x-4'>
-          <Link href='/' passHref>
-            <Typography as='a' variant='button-primary'>
+          <Link href='/'>
+            <Typography variant='button-primary'>
               Home
               <Icon icon='mdi:home-outline' />
             </Typography>
