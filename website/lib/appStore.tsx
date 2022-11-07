@@ -16,7 +16,6 @@ export type AppStore = AppConfig & {
   setAnimateBackground: (animate: boolean) => void;
   setPreviousRoute: (route: string) => void;
 };
-
 export const useAppStore = create<AppStore, [['zustand/immer', AppStore]]>(
   immer((set) => ({
     isRouteChanging: false,
