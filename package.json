@@ -19,7 +19,14 @@
     "dev": "dotenv turbo run dev --include-dependencies --parallel --continue",
     "build": "dotenv turbo run build --include-dependencies",
     "env": "doppler secrets download --format env --no-file > .env || true",
-    "sanity": "dotenv yarn workspace studio sanity"
+    "sanity": "dotenv yarn workspace studio sanity",
+    "postinstall": "husky install",
+    "commit": "commit"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "prettier": {
     "arrowParens": "always",
@@ -143,6 +150,8 @@
     ]
   },
   "dependencies": {
+    "@commitlint/cli": "^17.2.0",
+    "@commitlint/config-conventional": "^17.2.0",
     "@next/eslint-plugin-next": "12.3.1",
     "@sanity/eslint-config-studio": "2.0.0",
     "@types/prettier": "2.7.1",
@@ -160,6 +169,7 @@
     "eslint-plugin-security": "1.5.0",
     "eslint-plugin-security-node": "1.1.1",
     "eslint-plugin-simple-import-sort": "8.0.0",
+    "husky": "^8.0.1",
     "npm-run-all": "4.1.5",
     "prettier": "2.7.1",
     "rimraf": "3.0.2",
