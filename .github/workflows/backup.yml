@@ -1,30 +1,29 @@
-name: Backup Routine
-
+name: Backup
 on:
   schedule:
     - cron: '0 4 * * *'
   workflow_dispatch:
-
 jobs:
-  backup-dataset:
+  backup:
+    name: Backup
     runs-on: ubuntu-latest
-    name: Backup Sanity Data
     strategy:
       matrix:
         dataset: [ "development", "production" ]
     steps:
       - name: checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: set output file
         id: env
-        run: echo "::set-output name=filename::$(date +%Y-%m-%d)-${{ matrix.dataset}}.tar.gz"
+        run: echo "BACKUP_FILE=$(date +%Y-%m-%d)-${{ matrix.dataset}}.tar.gz" >> $GITHUB_ENV
 
       - name: setup node
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-
 
       - name: install global dependencies
         run: |
@@ -40,14 +39,14 @@ jobs:
 
           SANITY_STUDIO_API_PROJECT_ID="${{ secrets.SANITY_STUDIO_API_PROJECT_ID }}" \
           SANITY_AUTH_TOKEN="${{ secrets.SANITY_AUTH_TOKEN }}" \
-            sanity dataset export "${{ matrix.dataset}}" "${{ steps.env.outputs.filename }}"
+            sanity dataset export "${{ matrix.dataset}}" "${{ env.BACKUP_FILE }}"
         working-directory: ./studio
 
-      - name: upload backup.tar.gz
+      - name: upload backup file
         run: |
           set -e
 
           CLOUDFLARE_ACCOUNT_ID="${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" \
           CLOUDFLARE_API_TOKEN="${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-            wrangler r2 object put "backups/daniel.heene.io/${{ steps.env.outputs.filename }}" -f ${{ steps.env.outputs.filename }}
+            wrangler r2 object put "backups/daniel.heene.io/${{ env.BACKUP_FILE }}" -f ${{ env.BACKUP_FILE }}
         working-directory: ./studio
